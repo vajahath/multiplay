@@ -194,6 +194,69 @@ export const MetaDB = {
 };
 
 /**
+ * Profile type for database operations
+ */
+export interface ProfileRecord {
+    id: string;
+    name: string;
+    avatarEmoji: string;
+    createdAt: number;
+}
+
+/**
+ * Database operations for Profiles
+ */
+export const ProfilesDB = {
+    async getAll(): Promise<ProfileRecord[]> {
+        const db = await getDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORES.PROFILES, 'readonly');
+            const store = transaction.objectStore(STORES.PROFILES);
+            const request = store.getAll();
+
+            request.onsuccess = () => resolve(request.result || []);
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    async get(id: string): Promise<ProfileRecord | undefined> {
+        const db = await getDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORES.PROFILES, 'readonly');
+            const store = transaction.objectStore(STORES.PROFILES);
+            const request = store.get(id);
+
+            request.onsuccess = () => resolve(request.result as ProfileRecord | undefined);
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    async save(profile: ProfileRecord): Promise<void> {
+        const db = await getDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORES.PROFILES, 'readwrite');
+            const store = transaction.objectStore(STORES.PROFILES);
+            const request = store.put(profile);
+
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+
+    async delete(id: string): Promise<void> {
+        const db = await getDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORES.PROFILES, 'readwrite');
+            const store = transaction.objectStore(STORES.PROFILES);
+            const request = store.delete(id);
+
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    },
+};
+
+/**
  * Clear all data from the database (for reset functionality)
  */
 export async function clearAllData(): Promise<void> {

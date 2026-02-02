@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { fade, fly, scale } from 'svelte/transition';
   import { game } from './lib/stores/game.svelte';
+  import { profileStore } from './lib/stores/profile.svelte';
   import { audio } from './lib/audio/AudioManager';
   import EquationDisplay from './lib/components/molecules/EquationDisplay.svelte';
   import MultipleChoice from './lib/components/molecules/MultipleChoice.svelte';
@@ -9,7 +10,8 @@
   import Heatmap from './lib/components/molecules/Heatmap.svelte';
   import ProgressBar from './lib/components/atoms/ProgressBar.svelte';
   import SettingsComp from './lib/components/molecules/Settings.svelte';
-  import { Settings, BarChart3, ChevronLeft, Gamepad2, Sparkles, Trophy } from 'lucide-svelte';
+  import ProfileSelector from './lib/components/molecules/ProfileSelector.svelte';
+  import { Settings, BarChart3, ChevronLeft, Gamepad2, Sparkles, Trophy, Users } from 'lucide-svelte';
   import type { AnswerResult } from './worker/types';
 
   let view = $state<'game' | 'stats' | 'settings'>('game');
@@ -41,7 +43,8 @@
   const roundProgress = $derived(roundQuestionCount / game.roundLength);
 
   onMount(() => {
-    game.init();
+    // Initialize profile store - it will show selector if needed
+    profileStore.init();
   });
 
   // Reset state when new question loads
@@ -129,11 +132,24 @@
   <header class="flex justify-between items-center h-20 mb-6 bg-white/50 dark:bg-slate-800/50 backdrop-blur-xl p-4 rounded-[2rem] shadow-sm border border-white/20 dark:border-slate-700/30">
     {#if view === 'game'}
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30 animate-fun-bounce">
-          <Gamepad2 class="text-white fill-white" size={20} />
-        </div>
+        <!-- Profile Avatar Button -->
+        {#if profileStore.currentProfile}
+          <button 
+            onclick={() => profileStore.switchProfile()}
+            class="w-10 h-10 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/50 dark:to-purple-800/50 rounded-2xl flex items-center justify-center text-xl shadow-lg hover:scale-110 active:scale-95 transition-transform"
+            title="Switch player"
+          >
+            {profileStore.currentProfile.avatarEmoji}
+          </button>
+        {:else}
+          <div class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30 animate-fun-bounce">
+            <Gamepad2 class="text-white fill-white" size={20} />
+          </div>
+        {/if}
         <div>
-          <h1 class="text-2xl font-black text-slate-800 dark:text-white leading-none">Multiplay</h1>
+          <h1 class="text-2xl font-black text-slate-800 dark:text-white leading-none">
+            {profileStore.currentProfile?.name || 'Multiplay'}
+          </h1>
           <p class="text-[10px] font-black uppercase text-indigo-500 tracking-wider">Level Up Your Math</p>
         </div>
       </div>
@@ -264,6 +280,9 @@
     onContinue={startNewRound}
   />
 {/if}
+
+<!-- Profile Selector Modal -->
+<ProfileSelector />
 
 <style>
   :global(body) {

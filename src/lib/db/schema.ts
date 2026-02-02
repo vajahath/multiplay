@@ -12,7 +12,7 @@ export interface SchemaVersion {
 }
 
 // Current schema version - increment this when making breaking changes
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
 
 // Database name
 export const DB_NAME = 'MultiplayDB';
@@ -22,6 +22,7 @@ export const STORES = {
   FACTS: 'facts',
   SETTINGS: 'settings',
   META: 'meta',
+  PROFILES: 'profiles',
 } as const;
 
 /**
@@ -52,14 +53,20 @@ export const SCHEMA_MIGRATIONS: SchemaVersion[] = [
       }
     },
   },
-  // Future migrations go here:
-  // {
-  //   version: 2,
-  //   description: 'Add new field to facts',
-  //   migrate: (db, transaction) => {
-  //     // Perform migration...
-  //   },
-  // },
+  {
+    version: 2,
+    description: 'Add profiles store for multi-user support',
+    migrate: (db: IDBDatabase) => {
+      // Create profiles store with id as key path
+      if (!db.objectStoreNames.contains(STORES.PROFILES)) {
+        db.createObjectStore(STORES.PROFILES, { keyPath: 'id' });
+      }
+
+      // Add profileId index to facts for better querying
+      // Note: Can't modify existing store indexes in same transaction easily,
+      // so we'll handle profile scoping via key prefixes in the app layer
+    },
+  },
 ];
 
 /**
@@ -68,3 +75,4 @@ export const SCHEMA_MIGRATIONS: SchemaVersion[] = [
 export function getMigration(version: number): SchemaVersion | undefined {
   return SCHEMA_MIGRATIONS.find(m => m.version === version);
 }
+

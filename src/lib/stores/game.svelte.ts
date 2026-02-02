@@ -11,9 +11,35 @@ class GameStore {
     maxFactor = $state(10);
     roundLength = $state(10);
     bestStreak = $state(0);
+    currentProfileId = $state<string>('');
 
-    async init() {
-        await engine.init();
+    /**
+     * Initialize the game with a specific profile
+     */
+    async init(profileId: string) {
+        this.isInitializing = true;
+        this.currentProfileId = profileId;
+
+        // Pass profileId to engine - it runs in a worker and will set storage profile ID there
+        await engine.init(profileId);
+        this.enabledTables = await engine.getEnabledTables();
+        this.maxFactor = await engine.getMaxFactor();
+        this.roundLength = await engine.getRoundLength();
+        this.bestStreak = await engine.getBestStreak();
+        await this.refreshFacts();
+        await this.nextQuestion();
+        this.isInitializing = false;
+    }
+
+    /**
+     * Switch to a different profile
+     */
+    async switchProfile(profileId: string) {
+        this.isInitializing = true;
+        this.currentProfileId = profileId;
+
+        // Reinitialize with new profile data
+        await engine.init(profileId);
         this.enabledTables = await engine.getEnabledTables();
         this.maxFactor = await engine.getMaxFactor();
         this.roundLength = await engine.getRoundLength();
@@ -79,3 +105,4 @@ class GameStore {
 }
 
 export const game = new GameStore();
+

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { game } from '../../stores/game.svelte';
+  import { profileStore } from '../../stores/profile.svelte';
   import { APP_VERSION, updateStore } from '../../stores/version.svelte';
   import { CURRENT_SCHEMA_VERSION } from '../../db/schema';
-  import { RotateCcw, AlertTriangle, Download, Info } from 'lucide-svelte';
+  import { RotateCcw, AlertTriangle, Download, Info, Users } from 'lucide-svelte';
 
   const tables = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   
@@ -33,6 +34,10 @@
   function handleUpdate() {
     updateStore.applyUpdate();
   }
+
+  function handleSwitchProfile() {
+    profileStore.switchProfile();
+  }
 </script>
 
 <div class="space-y-10">
@@ -55,6 +60,32 @@
         </button>
       </div>
     </div>
+  {/if}
+
+  <!-- Current Profile Section -->
+  {#if profileStore.currentProfile}
+    <section class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-6 rounded-[2rem] border border-indigo-100 dark:border-indigo-800/50">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/50 dark:to-purple-800/50 rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+            {profileStore.currentProfile.avatarEmoji}
+          </div>
+          <div>
+            <div class="text-xs font-black uppercase text-indigo-500 tracking-widest mb-1">Playing as</div>
+            <div class="text-xl font-black text-slate-800 dark:text-white">
+              {profileStore.currentProfile.name}
+            </div>
+          </div>
+        </div>
+        <button
+          onclick={handleSwitchProfile}
+          class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold rounded-xl hover:bg-indigo-100 hover:text-indigo-600 dark:hover:bg-indigo-900/50 dark:hover:text-indigo-400 transition-all border border-slate-200 dark:border-slate-700"
+        >
+          <Users size={16} />
+          Switch
+        </button>
+      </div>
+    </section>
   {/if}
 
   <section class="space-y-6">

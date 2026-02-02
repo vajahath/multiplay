@@ -8,10 +8,12 @@ export {
     FactsDB,
     SettingsDB,
     MetaDB,
+    ProfilesDB,
     clearAllData,
     deleteDatabase,
     initDatabase,
-    getSchemaVersion
+    getSchemaVersion,
+    type ProfileRecord,
 } from './database';
 
 export { CURRENT_SCHEMA_VERSION, DB_NAME, STORES } from './schema';

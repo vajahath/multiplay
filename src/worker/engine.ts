@@ -1,4 +1,4 @@
-import { Storage } from './storage';
+import { Storage, setStorageProfileId, getStorageProfileId } from './storage';
 import { GameConfig } from './game-config';
 import { calculateConfidenceUpdate, selectNextQuestion } from './srs-algorithm';
 import { migrateLegacyData } from '../lib/db/migrate-legacy';
@@ -14,8 +14,12 @@ export class GameEngine {
 
     /**
      * Initializes the engine, loading facts from storage or generating defaults.
+     * @param profileId - The profile ID to scope all data operations
      */
-    async init(): Promise<void> {
+    async init(profileId: string): Promise<void> {
+        // CRITICAL: Set the profile ID for storage operations FIRST
+        setStorageProfileId(profileId);
+
         // Migrate any data from old idb-keyval stores
         await migrateLegacyData();
 
@@ -185,8 +189,12 @@ export class GameEngine {
 
     /**
      * Resets all user progress - clears facts and settings, then reinitializes.
+     * Uses the currently set profile ID.
      */
     async resetProgress(): Promise<void> {
+        // Get currentProfileId from storage module
+        const currentProfileId = getStorageProfileId();
+
         await Storage.clearAll();
         this.facts.clear();
         this.enabledTables = GameConfig.DEFAULT_ENABLED_TABLES;
@@ -194,6 +202,7 @@ export class GameEngine {
         this.roundLength = GameConfig.DEFAULT_ROUND_LENGTH;
         this.bestStreak = 0;
         this.answerCount = 0;
-        await this.init();
+        await this.init(currentProfileId);
     }
 }
+
