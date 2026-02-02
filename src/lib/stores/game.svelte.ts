@@ -50,7 +50,24 @@ class GameStore {
     }
 
     async nextQuestion() {
-        this.currentQuestion = await engine.getNextQuestion();
+        const question = await engine.getNextQuestion();
+        this.currentQuestion = question;
+        this.isAnswering = false;
+    }
+
+    /**
+     * Pre-fetches the next question from the engine.
+     * Returns a promise so the UI can mask latency.
+     */
+    async prepareNextQuestion(): Promise<Question> {
+        return await engine.getNextQuestion();
+    }
+
+    /**
+     * Applies a specific question to the state and resets answering flags.
+     */
+    applyNextQuestion(question: Question) {
+        this.currentQuestion = question;
         this.isAnswering = false;
     }
 

@@ -99,15 +99,28 @@
         correctAnswer: result.correctAnswer
       };
       
+      // PERFORMANCE OPTIMIZATION: Start pre-fetching background data immediately
+      // This masks the worker latency behind the result animation (700ms)
+      const nextQuestionPromise = (roundQuestionCount < game.roundLength) 
+        ? game.prepareNextQuestion() 
+        : null;
+        
+      const progressionPromise = (roundQuestionCount >= game.roundLength)
+        ? game.checkTableProgression()
+        : null;
+
       // Feedback display delay
       setTimeout(async () => {
         buttonResult = null;
+        
         if (roundQuestionCount >= game.roundLength) {
-          // Check for table progression before showing summary
-          unlockedTable = await game.checkTableProgression();
+          // If end of round, get the pre-calculated progression result
+          unlockedTable = await progressionPromise;
           showRoundSummary = true;
-        } else {
-          game.nextQuestion();
+        } else if (nextQuestionPromise) {
+          // If round continues, apply the pre-fetched question
+          const q = await nextQuestionPromise;
+          game.applyNextQuestion(q);
         }
       }, 700);
     }
