@@ -95,9 +95,13 @@
           game.setBestStreak(currentStreak);
         }
         audio.playCorrect();
+        // Haptic: Sharp, happy tap
+        if (navigator.vibrate) navigator.vibrate(10);
       } else {
         currentStreak = 0;
         audio.playWrong();
+        // Haptic: Longer, clear error buzz
+        if (navigator.vibrate) navigator.vibrate(50);
       }
       
       buttonResult = {
