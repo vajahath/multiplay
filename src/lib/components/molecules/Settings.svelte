@@ -1,8 +1,14 @@
 <script lang="ts">
   import { game } from '../../stores/game.svelte';
+  import { APP_VERSION, updateStore } from '../../stores/version.svelte';
+  import { CURRENT_SCHEMA_VERSION } from '../../db/schema';
+  import { RotateCcw, AlertTriangle, Download, Info } from 'lucide-svelte';
 
   const tables = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   
+  let showResetConfirm = $state(false);
+  let isResetting = $state(false);
+
   function toggleTable(table: number) {
     const current = game.enabledTables;
     if (current.includes(table)) {
@@ -13,9 +19,44 @@
       game.setEnabledTables([...current, table]);
     }
   }
+
+  async function handleReset() {
+    isResetting = true;
+    try {
+      await game.resetProgress();
+      showResetConfirm = false;
+    } finally {
+      isResetting = false;
+    }
+  }
+
+  function handleUpdate() {
+    updateStore.applyUpdate();
+  }
 </script>
 
 <div class="space-y-10">
+  <!-- Update Available Banner -->
+  {#if updateStore.hasUpdate}
+    <div class="bg-gradient-to-r from-emerald-500 to-teal-500 p-6 rounded-[2rem] text-white shadow-xl shadow-emerald-500/30 animate-pulse">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <Download size={24} />
+          <div>
+            <h4 class="font-black text-lg">Update Available!</h4>
+            <p class="text-sm opacity-90">A new version of Multiplay is ready.</p>
+          </div>
+        </div>
+        <button 
+          onclick={handleUpdate}
+          class="px-6 py-3 bg-white text-emerald-600 font-black rounded-2xl hover:bg-emerald-50 transition-all shadow-lg"
+        >
+          Update Now
+        </button>
+      </div>
+    </div>
+  {/if}
+
   <section class="space-y-6">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-black text-slate-800 dark:text-white font-display">Pick Your Tables</h2>
@@ -89,6 +130,63 @@
       Choose just 1 or 2 tables to practice at a time. It's the fastest way to get them to "Mastered" status!
     </p>
   </div>
+
+  <!-- Reset Progress Section -->
+  <section class="space-y-4">
+    <h3 class="text-lg font-black text-slate-800 dark:text-white">Danger Zone</h3>
+    
+    {#if showResetConfirm}
+      <div class="bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-800 p-6 rounded-[2rem] space-y-4">
+        <div class="flex items-start gap-3">
+          <AlertTriangle class="text-red-500 flex-shrink-0 mt-0.5" size={24} />
+          <div>
+            <h4 class="font-black text-red-700 dark:text-red-400">Are you sure?</h4>
+            <p class="text-sm text-red-600 dark:text-red-300">
+              This will permanently delete all your progress, including mastered facts, streaks, and settings. This action cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <button 
+            onclick={handleReset}
+            disabled={isResetting}
+            class="flex-1 py-3 bg-red-600 text-white font-black rounded-2xl hover:bg-red-700 transition-all disabled:opacity-50"
+          >
+            {isResetting ? 'Resetting...' : 'Yes, Reset Everything'}
+          </button>
+          <button 
+            onclick={() => showResetConfirm = false}
+            disabled={isResetting}
+            class="flex-1 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-black rounded-2xl hover:bg-slate-300 dark:hover:bg-slate-600 transition-all disabled:opacity-50"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    {:else}
+      <button 
+        onclick={() => showResetConfirm = true}
+        class="w-full flex items-center justify-center gap-3 py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold rounded-2xl hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400 transition-all border border-slate-200 dark:border-slate-700 hover:border-red-200 dark:hover:border-red-800"
+      >
+        <RotateCcw size={18} />
+        Reset All Progress
+      </button>
+    {/if}
+  </section>
+
+  <!-- Version Info -->
+  <section class="pt-6 border-t border-slate-200 dark:border-slate-700">
+    <div class="flex items-center justify-between text-sm">
+      <div class="flex items-center gap-2 text-slate-400">
+        <Info size={14} />
+        <span>Version</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="font-mono font-bold text-slate-500 dark:text-slate-400">v{APP_VERSION}</span>
+        <span class="text-xs text-slate-400">(Schema v{CURRENT_SCHEMA_VERSION})</span>
+      </div>
+    </div>
+  </section>
 </div>
 
 <style>

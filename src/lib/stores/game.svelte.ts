@@ -64,6 +64,18 @@ class GameStore {
         await engine.setBestStreak(value);
         this.bestStreak = value;
     }
+
+    async resetProgress() {
+        this.isInitializing = true;
+        await engine.resetProgress();
+        this.enabledTables = await engine.getEnabledTables();
+        this.maxFactor = await engine.getMaxFactor();
+        this.roundLength = await engine.getRoundLength();
+        this.bestStreak = await engine.getBestStreak();
+        await this.refreshFacts();
+        await this.nextQuestion();
+        this.isInitializing = false;
+    }
 }
 
 export const game = new GameStore();

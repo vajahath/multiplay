@@ -1,33 +1,33 @@
-import { createStore, get, set, values, setMany, del } from 'idb-keyval';
+import { FactsDB, SettingsDB, clearAllData, deleteDatabase } from '../lib/db/database';
 import type { Fact } from './types';
-
-const factsStore = createStore('MultiFlowDB-Facts', 'facts');
-const settingsStore = createStore('MultiFlowDB-Settings', 'settings');
 
 export const Storage = {
     async getAllFacts(): Promise<Fact[]> {
-        return values(factsStore);
+        return FactsDB.getAll();
     },
 
     async saveFacts(facts: Fact[]): Promise<void> {
-        const entries: [string, Fact][] = facts.map(f => [f.id, f]);
-        return setMany(entries, factsStore);
+        return FactsDB.saveMany(facts);
     },
 
     async updateFact(fact: Fact): Promise<void> {
-        return set(fact.id, fact, factsStore);
+        return FactsDB.update(fact);
     },
 
     async getSetting<T>(key: string): Promise<T | undefined> {
-        return get(key, settingsStore);
+        return SettingsDB.get<T>(key);
     },
 
     async setSetting<T>(key: string, value: T): Promise<void> {
-        return set(key, value, settingsStore);
+        return SettingsDB.set(key, value);
     },
 
     async clearAll(): Promise<void> {
-        // Note: idb-keyval doesn't have a clearStore, but we can delete the DB if needed
-        // or just leave it for now.
+        return clearAllData();
+    },
+
+    async deleteDatabase(): Promise<void> {
+        return deleteDatabase();
     }
 };
+

@@ -1,6 +1,7 @@
 import { Storage } from './storage';
 import { GameConfig } from './game-config';
 import { calculateConfidenceUpdate, selectNextQuestion } from './srs-algorithm';
+import { migrateLegacyData } from '../lib/db/migrate-legacy';
 import type { Fact, Question, AnswerResult } from './types';
 
 export class GameEngine {
@@ -15,6 +16,9 @@ export class GameEngine {
      * Initializes the engine, loading facts from storage or generating defaults.
      */
     async init(): Promise<void> {
+        // Migrate any data from old idb-keyval stores
+        await migrateLegacyData();
+
         let savedFacts = await Storage.getAllFacts();
 
         if (savedFacts.length === 0) {
@@ -177,5 +181,19 @@ export class GameEngine {
 
     async getAllFacts(): Promise<Fact[]> {
         return Array.from(this.facts.values());
+    }
+
+    /**
+     * Resets all user progress - clears facts and settings, then reinitializes.
+     */
+    async resetProgress(): Promise<void> {
+        await Storage.clearAll();
+        this.facts.clear();
+        this.enabledTables = GameConfig.DEFAULT_ENABLED_TABLES;
+        this.maxFactor = GameConfig.DEFAULT_MAX_FACTOR;
+        this.roundLength = GameConfig.DEFAULT_ROUND_LENGTH;
+        this.bestStreak = 0;
+        this.answerCount = 0;
+        await this.init();
     }
 }
