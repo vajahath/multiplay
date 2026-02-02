@@ -130,48 +130,48 @@
 
 <main class="mx-auto h-[100dvh] flex flex-col p-4 sm:p-6 font-sans transition-all duration-500 overflow-hidden {view === 'stats' ? 'max-w-6xl' : view === 'settings' ? 'max-w-4xl' : 'max-w-full lg:px-12 xl:px-24'}">
   <!-- Header: Compact and responsive -->
-  <header class="flex justify-between items-center h-16 sm:h-20 mb-4 sm:mb-6 px-2 shrink-0 transition-all duration-500">
+  <header class="flex justify-between items-center h-14 sm:h-16 mb-2 sm:mb-4 px-2 shrink-0 transition-all duration-500">
     {#if view === 'game'}
-      <div class="flex items-center gap-3 sm:gap-4">
+      <div class="flex items-center gap-3 min-w-0" in:fly={{ x: -20, duration: 500 }}>
         {#if profileStore.currentProfile}
           <button 
-            onclick={() => profileStore.switchProfile()}
+            onclick={() => view = 'settings'}
             class="relative group shrink-0"
           >
-            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl flex items-center justify-center text-xl sm:text-2xl shadow-lg border border-white dark:border-slate-700 group-hover:scale-110 transition-transform">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-lg border border-white dark:border-slate-700 group-hover:scale-105 transition-transform">
               {profileStore.currentProfile.avatarEmoji}
             </div>
-            <div class="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
           </button>
         {/if}
         <div class="min-w-0">
-          <div class="text-[9px] sm:text-[10px] font-black uppercase text-indigo-500 tracking-[0.2em] mb-0.5 opacity-80 truncate">Playing as</div>
-          <h1 class="text-lg sm:text-xl font-black text-slate-800 dark:text-white leading-none truncate">
+          <div class="text-[8px] sm:text-[9px] font-black uppercase text-indigo-500 tracking-[0.2em] mb-0.5 opacity-80 truncate">Playing as</div>
+          <h1 class="text-base sm:text-lg font-black text-slate-800 dark:text-white leading-none truncate">
             {profileStore.currentProfile?.name || 'Multiplay'}
           </h1>
         </div>
       </div>
     {:else}
-      <button onclick={() => view = 'game'} class="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl font-black text-sm sm:text-base text-slate-600 dark:text-slate-400 hover:text-indigo-600 border border-white/20 dark:border-slate-700/30 transition-all group">
-        <ChevronLeft size={18} class="group-hover:-translate-x-1 transition-transform" />
+      <button onclick={() => view = 'game'} class="flex items-center gap-2 px-3 py-1.5 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md rounded-xl font-black text-xs sm:text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 border border-white/20 dark:border-slate-700/30 transition-all group">
+        <ChevronLeft size={16} class="group-hover:-translate-x-1 transition-transform" />
         Back
       </button>
     {/if}
 
-    <div class="flex gap-2 sm:gap-3">
+    <div class="flex gap-2 sm:gap-2.5">
       <button 
         onclick={() => view = 'stats'} 
-        class="flex items-center gap-2 p-2.5 sm:px-4 sm:py-3 rounded-2xl transition-all duration-300 {view === 'stats' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30 scale-105' : 'bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700'}"
+        class="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-300 {view === 'stats' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700'}"
       >
-        <BarChart3 size={18} />
-        <span class="hidden sm:inline font-black text-sm uppercase tracking-widest">Stats</span>
+        <BarChart3 size={16} />
+        <span class="hidden sm:inline font-black text-xs uppercase tracking-widest">Stats</span>
       </button>
       <button 
         onclick={() => view = 'settings'} 
-        class="flex items-center gap-2 p-2.5 sm:px-4 sm:py-3 rounded-2xl transition-all duration-300 {view === 'settings' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30 scale-105' : 'bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700'}"
+        class="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-300 {view === 'settings' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700'}"
       >
-        <Settings size={18} />
-        <span class="hidden sm:inline font-black text-sm uppercase tracking-widest">Settings</span>
+        <Settings size={16} />
+        <span class="hidden sm:inline font-black text-xs uppercase tracking-widest">Settings</span>
       </button>
     </div>
   </header>
@@ -308,7 +308,12 @@
     results={roundResults}
     currentStreak={currentStreak}
     bestStreak={game.bestStreak}
+    allFacts={game.allFacts}
     onContinue={startNewRound}
+    onViewStats={async () => {
+      await startNewRound();
+      view = 'stats';
+    }}
   />
 {/if}
 

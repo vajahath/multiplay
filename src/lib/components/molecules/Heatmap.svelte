@@ -2,12 +2,14 @@
   import type { Fact } from '../../../worker/types';
   import { GameConfig } from '../../../worker/game-config';
   import { game } from '../../stores/game.svelte';
+  import { Check } from 'lucide-svelte';
 
   interface Props {
     facts: Fact[];
+    mini?: boolean;
   }
 
-  let { facts }: Props = $props();
+  let { facts, mini = false }: Props = $props();
 
   const matrix = $derived.by(() => {
     const m: (Fact | null)[][] = Array.from({ length: 13 }, () => Array(13).fill(null));
@@ -63,46 +65,60 @@
   }
 </script>
 
-<div class="p-6 bg-white dark:bg-slate-800 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-700/50">
-  <div class="flex flex-col gap-6">
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-      <h3 class="text-xl font-black text-slate-800 dark:text-white font-display">Your Mastery Map</h3>
-      
-      <!-- Legend -->
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] uppercase font-black tracking-widest text-slate-400">
-        <div class="flex items-center gap-1.5">
-          <div class="w-4 h-4 rounded bg-slate-300/30 dark:bg-slate-700/30"></div>
-          <span>Locked</span>
+<div class="w-full">
+  <div class="flex flex-col gap-10">
+    {#if !mini}
+      <div class="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-6">
+        <div>
+          <h3 class="text-3xl font-black text-slate-800 dark:text-white font-display mb-1.5 leading-tight">Your Mastery Map</h3>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-bold uppercase tracking-[0.15em] opacity-80">Fluency tracking across all math facts</p>
         </div>
-        <div class="flex items-center gap-1.5">
-          <div class="w-4 h-4 rounded bg-gradient-to-r from-rose-500 via-amber-500 to-lime-500"></div>
-          <span>Learning</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <div class="w-4 h-4 rounded bg-emerald-500"></div>
-          <span>Mastered</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <div class="w-4 h-4 rounded bg-indigo-500 ring-2 ring-white ring-offset-1 ring-offset-slate-800"></div>
-          <span>Practicing</span>
+        
+        <!-- Legend -->
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-[10px] uppercase font-black tracking-widest text-slate-500 dark:text-slate-400 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md p-5 rounded-[1.5rem] border border-white/20 dark:border-slate-700/20 shadow-sm">
+          <div class="flex items-center gap-2 group/leg cursor-default">
+            <div class="w-4 h-4 rounded-md bg-slate-300/30 dark:bg-slate-700/30 transition-transform group-hover/leg:scale-110"></div>
+            <span>Locked</span>
+          </div>
+          <div class="flex items-center gap-2 group/leg cursor-default">
+            <div class="w-4 h-4 rounded-md bg-gradient-to-br from-rose-500 via-orange-400 to-amber-500 shadow-sm transition-transform group-hover/leg:scale-110"></div>
+            <span>Learning</span>
+          </div>
+          <div class="flex items-center gap-2 group/leg cursor-default">
+            <div class="w-4 h-4 rounded-md bg-emerald-500 shadow-sm flex items-center justify-center transition-transform group-hover/leg:scale-110"><Check size={10} class="text-white" /></div>
+            <span>Mastered</span>
+          </div>
+          <div class="flex items-center gap-2 group/leg cursor-default">
+            <div class="w-4 h-4 rounded-md bg-indigo-500 ring-2 ring-indigo-500 ring-offset-2 ring-offset-[#f0f4ff] dark:ring-offset-[#0f172a] shadow-sm animate-pulse transition-transform group-hover/leg:scale-110"></div>
+            <span>Practicing</span>
+          </div>
         </div>
       </div>
-    </div>
+    {/if}
 
-    <div class="grid grid-cols-14 gap-1 sm:gap-1.5 font-display">
+    <div class="grid grid-cols-14 {mini ? 'gap-0.5' : 'gap-1.5 sm:gap-2.5 md:gap-3'} font-display select-none">
       <!-- Header Labels -->
       <div class="aspect-square"></div>
       {#each Array(13) as _, i}
-        <div class="flex items-center justify-center font-black text-slate-300 dark:text-slate-600 text-[10px]">{i}</div>
+        <div class="flex items-center justify-center font-black text-slate-400 dark:text-slate-500 {mini ? 'text-[7px]' : 'text-[11px] sm:text-xs'} transition-colors hover:text-indigo-500 cursor-default">{i}</div>
       {/each}
 
       {#each matrix as row, i}
-        <div class="flex items-center justify-end pr-2 font-black text-slate-300 dark:text-slate-600 text-[10px]">{i}</div>
+        <div class="flex items-center justify-end pr-2 sm:pr-4 font-black text-slate-400 dark:text-slate-500 {mini ? 'text-[7px]' : 'text-[11px] sm:text-xs'} transition-colors hover:text-indigo-500 cursor-default">{i}</div>
         {#each row as fact}
           <div 
-            class="aspect-square rounded-md sm:rounded-lg {getStatusColor(fact)} {getBorderStyle(fact)} transition-all duration-500 hover:scale-125 hover:z-10 shadow-sm"
-            title={fact ? `${fact.id}: ${(fact.confidence * 100).toFixed(0)}% confidence` : 'Locked'}
-          ></div>
+            class="aspect-square rounded-[2px] sm:rounded-lg md:rounded-xl {getStatusColor(fact)} {getBorderStyle(fact)} transition-all duration-300 hover:scale-150 hover:z-20 shadow-sm flex items-center justify-center relative group/box cursor-help"
+            title={fact ? `${fact.factors[0]} x ${fact.factors[1]} = ${fact.factors[0] * fact.factors[1]}\nConfidence: ${(fact.confidence * 100).toFixed(0)}%` : 'Locked'}
+          >
+            {#if fact && (fact.status === 'MASTERED' || fact.confidence >= GameConfig.MASTERED_THRESHOLD)}
+              <Check size={mini ? 6 : 14} class="text-white drop-shadow-md transition-transform group-hover/box:scale-110" />
+            {/if}
+            
+            <!-- Glow/Selection Effect -->
+            {#if fact && fact.status !== 'LOCKED'}
+              <div class="absolute inset-0 rounded-[2px] sm:rounded-lg md:rounded-xl bg-white/30 opacity-0 group-hover/box:opacity-100 transition-opacity pointer-events-none"></div>
+            {/if}
+          </div>
         {/each}
       {/each}
     </div>
@@ -114,4 +130,5 @@
     grid-template-columns: repeat(14, minmax(0, 1fr));
   }
 </style>
+
 
