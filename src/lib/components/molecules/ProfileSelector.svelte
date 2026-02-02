@@ -79,7 +79,7 @@
     in:fly={{ y: 20, duration: 400 }}
   >
     <div 
-      class="w-full max-w-md bg-white dark:bg-slate-800 rounded-[3rem] p-8 shadow-2xl"
+      class="w-full max-w-md sm:max-w-lg bg-white dark:bg-slate-800 rounded-[3rem] p-8 shadow-2xl"
       in:scale={{ start: 0.9, duration: 400, delay: 100 }}
     >
       {#if showCreateForm}

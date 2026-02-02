@@ -16,7 +16,7 @@
   }
 
   function getButtonClass(choice: number): string {
-    const base = "h-20 sm:h-24 text-4xl sm:text-5xl font-black rounded-[2rem] shadow-xl transition-all duration-300 touch-none select-none font-display border-b-8";
+    const base = "h-[clamp(3rem,min(9vh,5rem),5.5rem)] text-[clamp(1.25rem,6vh,2.5rem)] font-black rounded-2xl sm:rounded-[2.5rem] shadow-xl transition-all duration-300 touch-none select-none font-display border-b-4 sm:border-b-[6px]";
     
     if (showResult) {
       if (choice === showResult.correctAnswer) {
@@ -28,7 +28,6 @@
       }
     }
     
-    // Vibrant default state with "fat" buttons (3D effect with border-b)
     const activeStates = [
       "bg-amber-400 text-white border-amber-600 hover:bg-amber-300 hover:border-amber-500",
       "bg-indigo-500 text-white border-indigo-700 hover:bg-indigo-400 hover:border-indigo-600",
@@ -39,7 +38,7 @@
   }
 </script>
 
-<div class="flex flex-col gap-5 max-w-md mx-auto w-full px-4 mb-8">
+<div class="grid grid-cols-1 gap-2 w-full px-2">
   {#each choices as choice}
     <button 
       type="button"

@@ -33,7 +33,7 @@
 </script>
 
 <div class="fixed inset-0 bg-indigo-950/40 backdrop-blur-md flex items-center justify-center z-50 p-6" in:fade>
-  <div class="bg-white dark:bg-slate-800 rounded-[3rem] shadow-2xl max-w-sm w-full p-10 text-center relative overflow-hidden border border-white/20 dark:border-slate-700/50" in:scale={{ duration: 600, easing: elasticOut, start: 0.8 }}>
+  <div class="bg-white dark:bg-slate-800 rounded-[3rem] shadow-2xl max-w-sm sm:max-w-lg w-full p-10 text-center relative overflow-hidden border border-white/20 dark:border-slate-700/50" in:scale={{ duration: 600, easing: elasticOut, start: 0.8 }}>
     
     <!-- Background Decor -->
     <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-indigo-50 dark:from-indigo-900/20 to-transparent -z-10"></div>
