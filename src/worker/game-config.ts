@@ -5,17 +5,23 @@ export const GameConfig = {
     // PROGRESSION
     UNLOCK_THRESHOLD: 0.70,
     INITIAL_CONFIDENCE: 0.0,
-    MASTERED_THRESHOLD: 0.85,      // Easier to master (was 0.90)
+    MASTERED_THRESHOLD: 0.95,      // True fluency required (95%)
 
     // TIMING (ms)
-    TIME_THRESHOLD_FAST: 3000,
-    TIME_THRESHOLD_SLOW: 6000,
+    TIME_THRESHOLD_FAST: 3000,     // Under 3s = Fast (fluent recall)
+    TIME_THRESHOLD_SLOW: 6000,     // Over 6s = Slow (still calculating)
 
-    // CONFIDENCE SCORING - More aggressive!
-    CONFIDENCE_BOOST_FAST: 0.35,   // +35% for fast correct (was 0.25) - Master in ~3 fast answers
-    CONFIDENCE_BOOST_NORMAL: 0.25, // +25% for normal speed correct
-    CONFIDENCE_DECAY_SLOW: 0.10,   // +10% even for slow correct (still progress!)
-    CONFIDENCE_PENALTY_WRONG: -0.25, // -25% penalty for wrong (was -0.20)
+    // CONFIDENCE SCORING
+    CONFIDENCE_BOOST_FAST: 0.30,   // +30% for fast correct
+    CONFIDENCE_BOOST_NORMAL: 0.20, // +20% for normal speed correct
+    CONFIDENCE_DECAY_SLOW: 0.10,   // +10% for slow correct
+    CONFIDENCE_PENALTY_WRONG: -0.40, // -40% penalty for wrong
+
+    // FLUENCY GATES - Each speed tier has a maximum confidence ceiling
+    // To reach mastery, you MUST answer fast (<3s)
+    SLOW_CONFIDENCE_CAP: 0.70,     // Slow answers cap at 70%
+    NORMAL_CONFIDENCE_CAP: 0.85,   // Normal speed answers cap at 85%
+    // Fast answers have no cap - can reach 95% mastery
 
     // QUESTION SELECTION WEIGHTS (must sum to 100)
     // Controls the probability distribution for selecting the next question

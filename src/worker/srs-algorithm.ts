@@ -3,6 +3,13 @@ import type { Fact, Question } from './types';
 
 /**
  * Calculates the change in confidence based on performance.
+ * 
+ * TIERED FLUENCY SYSTEM:
+ * - Slow (>6s):   +10%, capped at 70%  — Learning the fact
+ * - Normal (3-6s): +20%, capped at 85% — Building speed  
+ * - Fast (<3s):   +30%, no cap         — True fluency, can reach 95% mastery
+ * 
+ * This ensures "Mastered" truly means instant recall, not just understanding.
  */
 export function calculateConfidenceUpdate(
     currentConfidence: number,
@@ -10,23 +17,33 @@ export function calculateConfidenceUpdate(
     timeTaken: number
 ): { newConfidence: number; delta: number } {
     let delta = 0;
+    let confidenceCap: number | null = null; // No cap by default
 
     if (isCorrect) {
         if (timeTaken < GameConfig.TIME_THRESHOLD_FAST) {
-            // Fast and correct - big boost!
+            // Fast and correct - big boost, NO CAP!
             delta = GameConfig.CONFIDENCE_BOOST_FAST;
+            // Fast answers can reach full mastery
         } else if (timeTaken < GameConfig.TIME_THRESHOLD_SLOW) {
-            // Normal speed - good boost
+            // Normal speed - good boost, but capped at 85%
             delta = GameConfig.CONFIDENCE_BOOST_NORMAL;
+            confidenceCap = GameConfig.NORMAL_CONFIDENCE_CAP;
         } else {
-            // Slow but correct - small boost (still positive!)
+            // Slow but correct - small boost, capped at 70%
             delta = GameConfig.CONFIDENCE_DECAY_SLOW;
+            confidenceCap = GameConfig.SLOW_CONFIDENCE_CAP;
         }
     } else {
         delta = GameConfig.CONFIDENCE_PENALTY_WRONG;
     }
 
-    const newConfidence = Math.max(0.0, Math.min(1.0, currentConfidence + delta));
+    let newConfidence = Math.max(0.0, Math.min(1.0, currentConfidence + delta));
+
+    // Apply fluency cap if applicable
+    if (confidenceCap !== null && newConfidence > confidenceCap) {
+        newConfidence = confidenceCap;
+    }
+
     return { newConfidence, delta: newConfidence - currentConfidence };
 }
 

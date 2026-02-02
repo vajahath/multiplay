@@ -8,6 +8,7 @@
   import MultipleChoice from './lib/components/molecules/MultipleChoice.svelte';
   import RoundSummary from './lib/components/molecules/RoundSummary.svelte';
   import Heatmap from './lib/components/molecules/Heatmap.svelte';
+  import ConfidenceInsight from './lib/components/molecules/ConfidenceInsight.svelte';
   import ProgressBar from './lib/components/atoms/ProgressBar.svelte';
   import SettingsComp from './lib/components/molecules/Settings.svelte';
   import ProfileSelector from './lib/components/molecules/ProfileSelector.svelte';
@@ -211,10 +212,12 @@
           </div>
         </div>
 
+        <ConfidenceInsight />
+
         <div class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-white/20 dark:border-slate-700/20">
-          <h4 class="text-base sm:text-lg font-black text-slate-800 dark:text-white mb-2">Keep it up! 🚀</h4>
+          <h4 class="text-base sm:text-lg font-black text-slate-800 dark:text-white mb-2">Pro Tip! 🚀</h4>
           <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-bold">
-            You're doing great. Practice the <span class="text-indigo-600 dark:text-indigo-400">blue cubes</span> to master more math facts!
+            Mastery is all about <span class="text-emerald-500">fluency</span>. Try to answer without counting on your fingers to get that <span class="text-emerald-500 uppercase tracking-wider">Power Boost</span>!
           </p>
         </div>
       </div>
