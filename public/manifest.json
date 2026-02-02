@@ -1,0 +1,16 @@
+{
+    "name": "MultiFlow",
+    "short_name": "MultiFlow",
+    "description": "High-performance multiplication learning flow state.",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#6366f1",
+    "icons": [
+        {
+            "src": "vite.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml"
+        }
+    ]
+}
