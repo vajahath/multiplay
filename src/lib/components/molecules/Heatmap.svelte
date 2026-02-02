@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { Fact } from '../../../worker/types';
+  import { GameConfig } from '../../../worker/game-config';
+  import { game } from '../../stores/game.svelte';
 
   interface Props {
     facts: Fact[];
@@ -15,50 +17,74 @@
     return m;
   });
 
-  // Colorblind friendly sequential scale (Blue -> Teal -> Emerald)
+  // Check if a fact is in the current enabled set
+  function isInCurrentSet(fact: Fact | null): boolean {
+    if (!fact) return false;
+    return (
+      (game.enabledTables.includes(fact.factors[0]) || game.enabledTables.includes(fact.factors[1])) &&
+      fact.factors[0] <= game.maxFactor &&
+      fact.factors[1] <= game.maxFactor
+    );
+  }
+
+  // Get background color based on status and confidence
   function getStatusColor(fact: Fact | null): string {
     if (!fact || fact.status === 'LOCKED') {
-      return 'bg-slate-200 dark:bg-slate-700 opacity-20';
+      return 'bg-slate-300/30 dark:bg-slate-700/30';
     }
     
-    const conf = fact.confidence;
+    // Mastered = Solid Green
+    if (fact.status === 'MASTERED' || fact.confidence >= GameConfig.MASTERED_THRESHOLD) {
+      return 'bg-emerald-500';
+    }
     
-    if (conf === 0) {
-      return 'bg-blue-300'; // New
-    } else if (conf < 0.25) {
-      return 'bg-blue-500'; // Learning low
-    } else if (conf < 0.5) {
-      return 'bg-indigo-500'; // Learning mid
+    // Active = Red to Green gradient based on confidence
+    const conf = fact.confidence;
+    // Map confidence 0-0.85 to a color from red (0) through yellow (0.4) to green (0.85)
+    if (conf < 0.2) {
+      return 'bg-rose-500'; // Very low
+    } else if (conf < 0.4) {
+      return 'bg-orange-500'; // Low
+    } else if (conf < 0.6) {
+      return 'bg-amber-500'; // Medium
     } else if (conf < 0.75) {
-      return 'bg-teal-500'; // Learning high
-    } else if (conf < GameConfig?.MASTERED_THRESHOLD || 0.85) {
-      return 'bg-emerald-400'; // Almost there
+      return 'bg-lime-500'; // Getting there
     } else {
-      return 'bg-emerald-600'; // Mastered
+      return 'bg-emerald-400'; // Almost mastered
     }
   }
 
-  import { GameConfig } from '../../../worker/game-config';
+  // Get border style for current set
+  function getBorderStyle(fact: Fact | null): string {
+    if (isInCurrentSet(fact) && fact?.status === 'ACTIVE') {
+      return 'ring-2 ring-white ring-offset-1 ring-offset-slate-800';
+    }
+    return '';
+  }
 </script>
 
 <div class="p-6 bg-white dark:bg-slate-800 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-700/50">
   <div class="flex flex-col gap-6">
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
       <h3 class="text-xl font-black text-slate-800 dark:text-white font-display">Your Mastery Map</h3>
       
       <!-- Legend -->
-      <div class="flex items-center gap-3 text-[10px] uppercase font-black tracking-widest text-slate-400">
-        <div class="flex items-center gap-1">
-          <div class="w-3 h-3 rounded-full bg-slate-200 dark:bg-slate-700 opacity-20"></div>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] uppercase font-black tracking-widest text-slate-400">
+        <div class="flex items-center gap-1.5">
+          <div class="w-4 h-4 rounded bg-slate-300/30 dark:bg-slate-700/30"></div>
           <span>Locked</span>
         </div>
-        <div class="flex items-center gap-1">
-          <div class="w-3 h-3 rounded-full bg-blue-300"></div>
-          <span>New</span>
+        <div class="flex items-center gap-1.5">
+          <div class="w-4 h-4 rounded bg-gradient-to-r from-rose-500 via-amber-500 to-lime-500"></div>
+          <span>Learning</span>
         </div>
-        <div class="flex items-center gap-1">
-          <div class="w-3 h-3 rounded-full bg-emerald-600"></div>
-          <span>Pro</span>
+        <div class="flex items-center gap-1.5">
+          <div class="w-4 h-4 rounded bg-emerald-500"></div>
+          <span>Mastered</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div class="w-4 h-4 rounded bg-indigo-500 ring-2 ring-white ring-offset-1 ring-offset-slate-800"></div>
+          <span>Practicing</span>
         </div>
       </div>
     </div>
@@ -74,8 +100,8 @@
         <div class="flex items-center justify-end pr-2 font-black text-slate-300 dark:text-slate-600 text-[10px]">{i}</div>
         {#each row as fact}
           <div 
-            class="aspect-square rounded-md sm:rounded-lg {getStatusColor(fact)} transition-all duration-500 hover:scale-125 hover:z-10 shadow-sm"
-            title={fact ? `${fact.id}: ${(fact.confidence * 100).toFixed(0)}%` : 'Locked'}
+            class="aspect-square rounded-md sm:rounded-lg {getStatusColor(fact)} {getBorderStyle(fact)} transition-all duration-500 hover:scale-125 hover:z-10 shadow-sm"
+            title={fact ? `${fact.id}: ${(fact.confidence * 100).toFixed(0)}% confidence` : 'Locked'}
           ></div>
         {/each}
       {/each}
@@ -88,3 +114,4 @@
     grid-template-columns: repeat(14, minmax(0, 1fr));
   }
 </style>
+

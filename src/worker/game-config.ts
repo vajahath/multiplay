@@ -1,6 +1,6 @@
 export const GameConfig = {
     // PRACTICE SET - Control how many facts are active at once
-    ACTIVE_SET_SIZE: 15,           // Only 8 facts practicing at a time
+    ACTIVE_SET_SIZE: 15,           // Only 15 facts practicing at a time
 
     // PROGRESSION
     UNLOCK_THRESHOLD: 0.70,
@@ -17,8 +17,18 @@ export const GameConfig = {
     CONFIDENCE_DECAY_SLOW: 0.10,   // +10% even for slow correct (still progress!)
     CONFIDENCE_PENALTY_WRONG: -0.25, // -25% penalty for wrong (was -0.20)
 
+    // QUESTION SELECTION WEIGHTS (must sum to 100)
+    // Controls the probability distribution for selecting the next question
+    WEIGHT_WEAK_ITEMS: 60,         // 60% chance: Pick from weakest confidence items (intensive drilling)
+    WEIGHT_MASTERED_REVIEW: 20,    // 20% chance: Pick from mastered items (reinforcement to prevent decay)
+    WEIGHT_LEARNING_VARIETY: 20,   // 20% chance: Pick from remaining learning set (variety)
+
+    // How many "weakest" items to consider for the weak pool
+    WEAK_POOL_SIZE: 5,
+
     // DEFAULT SETTINGS
     DEFAULT_ENABLED_TABLES: [1, 2, 5, 10],
     DEFAULT_MAX_FACTOR: 10,
     DEFAULT_ROUND_LENGTH: 10,
 };
+
