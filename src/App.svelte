@@ -189,7 +189,7 @@
   {:else if view === 'stats'}
     <div class="flex-1 overflow-y-auto pb-12 soft-scroll lg:grid lg:grid-cols-2 lg:gap-12 lg:space-y-0" in:fly={{ y: 20, duration: 500 }}>
       <!-- Left Column: Heatmap -->
-      <div class="space-y-8">
+      <div class="space-y-12">
         <Heatmap facts={game.allFacts} />
       </div>
       
@@ -223,10 +223,8 @@
       </div>
     </div>
   {:else if view === 'settings'}
-    <div class="flex-1 overflow-y-auto pb-12" in:fly={{ x: 20, duration: 500 }}>
-      <div class="bg-white/50 dark:bg-slate-800/50 backdrop-blur-xl p-8 rounded-[3rem] border border-white/20 dark:border-slate-700/30">
-        <SettingsComp />
-      </div>
+    <div class="flex-1 overflow-y-auto pb-12 soft-scroll" in:fly={{ x: 20, duration: 500 }}>
+      <SettingsComp />
     </div>
   {:else}
     <div class="flex-1 flex flex-col gap-4 min-h-0 pb-4" in:fade>

@@ -3,7 +3,7 @@
   import { profileStore } from '../../stores/profile.svelte';
   import { APP_VERSION, updateStore } from '../../stores/version.svelte';
   import { CURRENT_SCHEMA_VERSION } from '../../db/schema';
-  import { RotateCcw, AlertTriangle, Download, Info, Users } from 'lucide-svelte';
+  import { RotateCcw, AlertTriangle, Download, Info, Users, Github } from 'lucide-svelte';
 
   const tables = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   
@@ -66,7 +66,7 @@
 
     <!-- Current Profile Section -->
     {#if profileStore.currentProfile}
-      <section class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 p-6 rounded-[2rem] border border-indigo-100 dark:border-indigo-800/50">
+      <section class="bg-indigo-50/50 dark:bg-indigo-900/10 p-6 rounded-[2rem] border border-indigo-100/50 dark:border-indigo-800/30">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
             <div class="w-14 h-14 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-800/50 dark:to-purple-800/50 rounded-2xl flex items-center justify-center text-3xl shadow-lg">
@@ -115,13 +115,13 @@
 
   <!-- Right Side: Sliders & Meta -->
   <div class="space-y-8">
-    <section class="space-y-8">
-      <div class="space-y-4 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-[2rem] border border-slate-100 dark:border-slate-800">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest" for="max-factor">
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+      <div class="space-y-4 p-6 bg-slate-100/30 dark:bg-slate-800/20 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/30">
+        <div class="flex justify-between items-center px-1">
+          <label class="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]" for="max-factor">
             Difficulty
           </label>
-          <span class="text-lg font-black text-indigo-600">Up to {game.maxFactor}</span>
+          <span class="text-lg font-black text-indigo-500">Up to {game.maxFactor}</span>
         </div>
         <input 
           id="max-factor"
@@ -130,18 +130,18 @@
           max="12" 
           step="1"
           value={game.maxFactor}
-          class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-indigo-600 range-vibrant"
+          class="w-full h-2.5 bg-slate-200 dark:bg-slate-700/50 rounded-full appearance-none cursor-pointer accent-indigo-600 range-vibrant"
           oninput={(e) => game.setMaxFactor(parseInt(e.currentTarget.value))}
         />
-        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Sets the largest number you'll see.</p>
+        <p class="px-1 text-[10px] font-bold text-slate-400 opacity-80 uppercase tracking-tight">Sets the largest number you'll see</p>
       </div>
 
-      <div class="space-y-4 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-[2rem] border border-slate-100 dark:border-slate-800">
-        <div class="flex justify-between items-center">
-          <label class="text-sm font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest" for="round-length">
+      <div class="space-y-4 p-6 bg-slate-100/30 dark:bg-slate-800/20 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/30">
+        <div class="flex justify-between items-center px-1">
+          <label class="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]" for="round-length">
             Round Size
           </label>
-          <span class="text-lg font-black text-indigo-600">{game.roundLength} Q's</span>
+          <span class="text-lg font-black text-indigo-500">{game.roundLength} Q's</span>
         </div>
         <input 
           id="round-length"
@@ -150,10 +150,10 @@
           max="50" 
           step="5"
           value={game.roundLength}
-          class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-indigo-600 range-vibrant"
+          class="w-full h-2.5 bg-slate-200 dark:bg-slate-700/50 rounded-full appearance-none cursor-pointer accent-indigo-600 range-vibrant"
           oninput={(e) => game.setRoundLength(parseInt(e.currentTarget.value))}
         />
-        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">How many questions per round.</p>
+        <p class="px-1 text-[10px] font-bold text-slate-400 opacity-80 uppercase tracking-tight">How many questions per round</p>
       </div>
     </section>
 
@@ -208,17 +208,25 @@
       {/if}
     </section>
 
-    <!-- Version Info -->
-    <section class="pt-6 border-t border-slate-200 dark:border-slate-700">
-      <div class="flex items-center justify-between text-[10px] sm:text-xs">
+    <!-- Version & Social -->
+    <section class="pt-8 border-t border-slate-200 dark:border-slate-700/50 space-y-4">
+      <div class="flex items-center justify-between text-[10px] sm:text-xs font-bold">
         <div class="flex items-center gap-2 text-slate-400">
-          <Info size={12} />
-          <span>Version</span>
+          <Info size={14} />
+          <span>Multiplay v{APP_VERSION}</span>
         </div>
-        <div class="flex items-center gap-3">
-          <span class="font-mono font-bold text-slate-500 dark:text-slate-400">v{APP_VERSION}</span>
-          <span class="text-slate-400">(Schema v{CURRENT_SCHEMA_VERSION})</span>
-        </div>
+        <a 
+          href="https://github.com/vajahath/multiplay" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex items-center gap-2 text-indigo-500 hover:text-indigo-400 transition-colors bg-indigo-500/5 px-3 py-1.5 rounded-lg border border-indigo-500/10"
+        >
+          <Github size={14} />
+          <span>Source Code</span>
+        </a>
+      </div>
+      <div class="text-[9px] text-slate-400/60 font-mono text-center pb-2">
+        Schema v{CURRENT_SCHEMA_VERSION}
       </div>
     </section>
   </div>
