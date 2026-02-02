@@ -91,6 +91,19 @@ class GameStore {
         this.bestStreak = value;
     }
 
+    /**
+     * Check if the user has made enough progress to unlock a new table.
+     * If so, automatically enables it and returns the table number.
+     * Returns null if no new table was unlocked.
+     */
+    async checkTableProgression(): Promise<number | null> {
+        const newTable = await engine.checkAndApplyTableProgression();
+        if (newTable !== null) {
+            this.enabledTables = await engine.getEnabledTables();
+        }
+        return newTable;
+    }
+
     async resetProgress() {
         this.isInitializing = true;
         await engine.resetProgress();
@@ -105,4 +118,3 @@ class GameStore {
 }
 
 export const game = new GameStore();
-

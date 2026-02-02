@@ -124,4 +124,54 @@ export function selectNextQuestion(facts: Fact[], enabledTables: number[], maxFa
     };
 }
 
+/**
+ * Adaptive Table Progression System
+ * 
+ * Checks if the user has mastered enough facts in their current tables
+ * to warrant automatically unlocking a new table.
+ * 
+ * Strategy:
+ * 1. Calculate total facts available from currently enabled tables
+ * 2. Calculate how many of those are MASTERED
+ * 3. If mastery rate >= threshold, find the next table in the unlock order
+ * 4. Return the table to unlock, or null if none needed
+ */
+export function checkAdaptiveTableProgression(
+    facts: Fact[],
+    enabledTables: number[],
+    maxFactor: number
+): number | null {
+    // Get facts that belong to currently enabled tables
+    const currentTableFacts = facts.filter(f =>
+        (enabledTables.includes(f.factors[0]) || enabledTables.includes(f.factors[1])) &&
+        f.factors[0] <= maxFactor &&
+        f.factors[1] <= maxFactor &&
+        f.status !== 'LOCKED'
+    );
 
+    if (currentTableFacts.length === 0) {
+        return null;
+    }
+
+    // Count mastered facts
+    const masteredCount = currentTableFacts.filter(f => f.status === 'MASTERED').length;
+    const masteryRate = masteredCount / currentTableFacts.length;
+
+    // Check if we've hit the threshold
+    if (masteryRate < GameConfig.AUTO_UNLOCK_MASTERY_THRESHOLD) {
+        return null;
+    }
+
+    // Find the next table to unlock based on pedagogical order
+    const unlockOrder = GameConfig.TABLE_UNLOCK_ORDER;
+
+    for (const table of unlockOrder) {
+        if (!enabledTables.includes(table) && table <= maxFactor) {
+            // Found a table that's in our unlock order but not yet enabled
+            return table;
+        }
+    }
+
+    // All tables are already enabled
+    return null;
+}

@@ -33,8 +33,19 @@ export const GameConfig = {
     WEAK_POOL_SIZE: 5,
 
     // DEFAULT SETTINGS
-    DEFAULT_ENABLED_TABLES: [1, 2, 5, 10],
+    DEFAULT_ENABLED_TABLES: [1, 2, 3, 5, 10],
     DEFAULT_MAX_FACTOR: 10,
     DEFAULT_ROUND_LENGTH: 10,
+
+    // ADAPTIVE TABLE PROGRESSION
+    // Tables ordered by pedagogical difficulty (not numerically)
+    // Starter: Pattern-based tables kids learn first
+    // Easy: Simple extensions (4 = double of 2, 11 has pattern)
+    // Medium: Trickier but learnable (9 finger trick, 6 builds on 3)
+    // Hard: Least patterned, most challenging
+    TABLE_UNLOCK_ORDER: [1, 2, 3, 5, 10, 4, 11, 9, 6, 7, 8, 12, 0],
+
+    // Minimum mastery percentage of current tables before auto-unlocking next
+    AUTO_UNLOCK_MASTERY_THRESHOLD: 0.65, // 65% of current facts mastered
 };
 

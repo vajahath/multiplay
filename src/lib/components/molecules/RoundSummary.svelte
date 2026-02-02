@@ -2,7 +2,7 @@
   import { fade, scale, fly } from 'svelte/transition';
   import { elasticOut } from 'svelte/easing';
   import type { AnswerResult, Fact } from '../../../worker/types';
-  import { Trophy, Star, TrendingUp, ArrowRight, PartyPopper, Eye, Check } from 'lucide-svelte';
+  import { Trophy, Star, TrendingUp, ArrowRight, PartyPopper, Eye, Check, Sparkles, Unlock } from 'lucide-svelte';
   import Heatmap from './Heatmap.svelte';
 
   interface Props {
@@ -12,6 +12,7 @@
     currentStreak: number;
     bestStreak: number;
     allFacts: Fact[];
+    unlockedTable?: number | null;
     onContinue: () => void;
     onViewStats: () => void;
   }
@@ -22,7 +23,8 @@
     results, 
     currentStreak, 
     bestStreak, 
-    allFacts, 
+    allFacts,
+    unlockedTable = null,
     onContinue,
     onViewStats 
   }: Props = $props();
@@ -114,6 +116,29 @@
                 <span>{improvements.mastered} New Mastery!</span>
               </div>
             {/if}
+          </div>
+        {/if}
+
+        <!-- New Table Unlocked Banner -->
+        {#if unlockedTable !== null}
+          <div class="w-full bg-gradient-to-r from-teal-500 to-emerald-500 rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 mb-6 text-left text-white shadow-lg shadow-emerald-500/30 relative overflow-hidden" in:fly={{ y: 20, delay: 300, duration: 500 }}>
+            <div class="absolute -right-4 -top-4 opacity-20">
+              <Sparkles size={80} />
+            </div>
+            <div class="flex items-center gap-3 relative z-10">
+              <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                <Unlock size={24} />
+              </div>
+              <div>
+                <div class="flex items-center gap-2 font-black text-xs uppercase tracking-widest mb-1">
+                  <Sparkles size={14} class="animate-pulse" />
+                  New Table Unlocked!
+                </div>
+                <p class="text-lg sm:text-xl font-black">
+                  The <span class="bg-white/20 px-2 py-0.5 rounded-lg">{unlockedTable}×</span> table is now available!
+                </p>
+              </div>
+            </div>
           </div>
         {/if}
 

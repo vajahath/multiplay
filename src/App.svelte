@@ -25,6 +25,7 @@
   let roundResults = $state<AnswerResult[]>([]);
   let showRoundSummary = $state(false);
   let hasStartedRound = $state(false);
+  let unlockedTable = $state<number | null>(null);
   
   // Winstreak
   let currentStreak = $state(0);
@@ -99,9 +100,11 @@
       };
       
       // Feedback display delay
-      setTimeout(() => {
+      setTimeout(async () => {
         buttonResult = null;
         if (roundQuestionCount >= game.roundLength) {
+          // Check for table progression before showing summary
+          unlockedTable = await game.checkTableProgression();
           showRoundSummary = true;
         } else {
           game.nextQuestion();
@@ -116,6 +119,7 @@
     roundCorrectCount = 0;
     roundResults = [];
     hasStartedRound = false;
+    unlockedTable = null;
     await game.refreshFacts();
     game.nextQuestion();
   }
@@ -307,6 +311,7 @@
     currentStreak={currentStreak}
     bestStreak={game.bestStreak}
     allFacts={game.allFacts}
+    unlockedTable={unlockedTable}
     onContinue={startNewRound}
     onViewStats={async () => {
       await startNewRound();

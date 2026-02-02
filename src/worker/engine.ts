@@ -1,6 +1,6 @@
 import { Storage, setStorageProfileId, getStorageProfileId } from './storage';
 import { GameConfig } from './game-config';
-import { calculateConfidenceUpdate, selectNextQuestion } from './srs-algorithm';
+import { calculateConfidenceUpdate, selectNextQuestion, checkAdaptiveTableProgression } from './srs-algorithm';
 import { migrateLegacyData } from '../lib/db/migrate-legacy';
 import type { Fact, Question, AnswerResult } from './types';
 
@@ -142,9 +142,45 @@ export class GameEngine {
     /**
      * Called periodically to maintain the active practice set.
      * When a fact is mastered, ensureActiveSetSize will fill the slot.
+     * Also checks if we should auto-unlock a new table based on mastery progress.
      */
     private async checkProgression() {
         await this.ensureActiveSetSize();
+
+        // Check adaptive table progression
+        const newTable = checkAdaptiveTableProgression(
+            Array.from(this.facts.values()),
+            this.enabledTables,
+            this.maxFactor
+        );
+
+        if (newTable !== null && !this.enabledTables.includes(newTable)) {
+            this.enabledTables = [...this.enabledTables, newTable];
+            await Storage.setSetting('enabledTables', this.enabledTables);
+        }
+    }
+
+    /**
+     * Public method to check and apply table progression.
+     * Returns the newly unlocked table number, or null if none was unlocked.
+     * Useful for UI notifications at round end.
+     */
+    async checkAndApplyTableProgression(): Promise<number | null> {
+        await this.ensureActiveSetSize();
+
+        const newTable = checkAdaptiveTableProgression(
+            Array.from(this.facts.values()),
+            this.enabledTables,
+            this.maxFactor
+        );
+
+        if (newTable !== null && !this.enabledTables.includes(newTable)) {
+            this.enabledTables = [...this.enabledTables, newTable];
+            await Storage.setSetting('enabledTables', this.enabledTables);
+            return newTable;
+        }
+
+        return null;
     }
 
     async setEnabledTables(tables: number[]): Promise<void> {
