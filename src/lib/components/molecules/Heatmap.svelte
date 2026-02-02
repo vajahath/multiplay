@@ -15,89 +15,71 @@
     return m;
   });
 
+  // Colorblind friendly sequential scale (Blue -> Teal -> Emerald)
   function getStatusColor(fact: Fact | null): string {
     if (!fact || fact.status === 'LOCKED') {
-      return 'bg-slate-200 dark:bg-slate-700';
+      return 'bg-slate-200 dark:bg-slate-700 opacity-20';
     }
     
-    // ACTIVE or MASTERED - show confidence gradient
     const conf = fact.confidence;
     
     if (conf === 0) {
-      // Just started - bright blue to indicate active
-      return 'bg-blue-400';
-    } else if (conf < 0.3) {
-      // Low confidence - red
-      return 'bg-red-500';
+      return 'bg-blue-300'; // New
+    } else if (conf < 0.25) {
+      return 'bg-blue-500'; // Learning low
     } else if (conf < 0.5) {
-      // Getting better - orange
-      return 'bg-orange-500';
-    } else if (conf < 0.7) {
-      // Medium - yellow
-      return 'bg-yellow-400';
-    } else if (conf < 0.9) {
-      // Good - lime
-      return 'bg-lime-500';
+      return 'bg-indigo-500'; // Learning mid
+    } else if (conf < 0.75) {
+      return 'bg-teal-500'; // Learning high
+    } else if (conf < GameConfig?.MASTERED_THRESHOLD || 0.85) {
+      return 'bg-emerald-400'; // Almost there
     } else {
-      // Mastered - bright green
-      return 'bg-emerald-500';
+      return 'bg-emerald-600'; // Mastered
     }
   }
 
-  function getOpacity(fact: Fact | null): string {
-    if (!fact || fact.status === 'LOCKED') {
-      return 'opacity-30';
-    }
-    return 'opacity-100';
-  }
+  import { GameConfig } from '../../../worker/game-config';
 </script>
 
-<div class="p-4 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700">
-  <!-- Legend -->
-  <div class="flex items-center justify-center gap-4 mb-4 text-xs">
-    <div class="flex items-center gap-1">
-      <div class="w-3 h-3 rounded-sm bg-slate-200 dark:bg-slate-700 opacity-30"></div>
-      <span class="text-slate-500">Locked</span>
+<div class="p-6 bg-white dark:bg-slate-800 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-700/50">
+  <div class="flex flex-col gap-6">
+    <div class="flex justify-between items-center">
+      <h3 class="text-xl font-black text-slate-800 dark:text-white font-display">Your Mastery Map</h3>
+      
+      <!-- Legend -->
+      <div class="flex items-center gap-3 text-[10px] uppercase font-black tracking-widest text-slate-400">
+        <div class="flex items-center gap-1">
+          <div class="w-3 h-3 rounded-full bg-slate-200 dark:bg-slate-700 opacity-20"></div>
+          <span>Locked</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <div class="w-3 h-3 rounded-full bg-blue-300"></div>
+          <span>New</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <div class="w-3 h-3 rounded-full bg-emerald-600"></div>
+          <span>Pro</span>
+        </div>
+      </div>
     </div>
-    <div class="flex items-center gap-1">
-      <div class="w-3 h-3 rounded-sm bg-blue-400"></div>
-      <span class="text-slate-500">New</span>
-    </div>
-    <div class="flex items-center gap-1">
-      <div class="w-3 h-3 rounded-sm bg-red-500"></div>
-      <span class="text-slate-500">Learning</span>
-    </div>
-    <div class="flex items-center gap-1">
-      <div class="w-3 h-3 rounded-sm bg-emerald-500"></div>
-      <span class="text-slate-500">Mastered</span>
-    </div>
-  </div>
 
-  <div class="grid grid-cols-14 gap-0.5 md:gap-1 text-[8px] md:text-[10px]">
-    <!-- Header Labels -->
-    <div class="col-start-2 flex items-center justify-center font-bold text-slate-400">0</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">1</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">2</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">3</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">4</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">5</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">6</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">7</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">8</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">9</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">10</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">11</div>
-    <div class="flex items-center justify-center font-bold text-slate-400">12</div>
-
-    {#each matrix as row, i}
-      <div class="flex items-center justify-end pr-1 font-bold text-slate-400">{i}</div>
-      {#each row as fact}
-        <div 
-          class="aspect-square rounded-sm {getStatusColor(fact)} {getOpacity(fact)} transition-colors duration-300"
-          title={fact ? `${fact.id}: ${(fact.confidence * 100).toFixed(0)}%` : 'Locked'}
-        ></div>
+    <div class="grid grid-cols-14 gap-1 sm:gap-1.5 font-display">
+      <!-- Header Labels -->
+      <div class="aspect-square"></div>
+      {#each Array(13) as _, i}
+        <div class="flex items-center justify-center font-black text-slate-300 dark:text-slate-600 text-[10px]">{i}</div>
       {/each}
-    {/each}
+
+      {#each matrix as row, i}
+        <div class="flex items-center justify-end pr-2 font-black text-slate-300 dark:text-slate-600 text-[10px]">{i}</div>
+        {#each row as fact}
+          <div 
+            class="aspect-square rounded-md sm:rounded-lg {getStatusColor(fact)} transition-all duration-500 hover:scale-125 hover:z-10 shadow-sm"
+            title={fact ? `${fact.id}: ${(fact.confidence * 100).toFixed(0)}%` : 'Locked'}
+          ></div>
+        {/each}
+      {/each}
+    </div>
   </div>
 </div>
 

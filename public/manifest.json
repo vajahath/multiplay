@@ -1,7 +1,7 @@
 {
-    "name": "MultiFlow",
-    "short_name": "MultiFlow",
-    "description": "High-performance multiplication learning flow state.",
+    "name": "Multiplay",
+    "short_name": "Multiplay",
+    "description": "The Fun Way to Level Up Your Multiplication Skills.",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#f8fafc",
