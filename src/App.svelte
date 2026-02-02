@@ -33,6 +33,7 @@
   // Result display on buttons
   let buttonResult = $state<{ selectedAnswer: number; correctAnswer: number } | null>(null);
   let choices = $state<number[]>([]);
+  let questionStartTime = $state<number>(0);
 
   // Compute the correct answer for the current question
   const correctAnswer = $derived(
@@ -65,6 +66,9 @@
         if (wrong !== correctAnswer && wrong >= 0) options.add(wrong);
       }
       choices = [...options].sort(() => Math.random() - 0.5);
+      
+      // Start the timer for the new question
+      questionStartTime = performance.now();
     }
   });
 
@@ -75,7 +79,9 @@
     hasStartedRound = true;
     selectedAnswer = answer;
     
-    const result = await game.submitAnswer(answer, 1500); 
+    // Calculate precise time taken
+    const timeTaken = Math.round(performance.now() - questionStartTime);
+    const result = await game.submitAnswer(answer, timeTaken); 
     
     if (result) {
       isCorrect = result.isCorrect;
