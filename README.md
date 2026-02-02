@@ -1,82 +1,47 @@
 # 🎮 Multiplay
 
-**Level Up Your Math | The Ultimate Multiplication Game**
+A smart, playful multiplication trainer designed to help kids move from counting to instant recall. Multiplay uses spaced repetition and adaptive learning to make practicing math feel more like a game and less like a chore.
 
-Multiplay is a high-performance, mobile-first multiplication learning web application designed to turn rote memorization into a fun, gamified flow state. Built with Svelte 5 and a custom Spaced Repetition System (SRS) engine running in a Web Worker, it provides a seamless, distraction-free environment for mastering multiplication tables.
+![Multiplay Desktop Display](media/dekstop.jpg)
 
----
+## 🧠 How it Helps Kids Learn
 
-## ✨ Key Features
+Unlike simple quiz apps, Multiplay uses cognitive science principles to guide learners through the multiplication tables.
 
-- **🎯 Controlled Practice Set**: Unlike other apps that flood you with 100+ facts, Multiplay focuses on a tight set of **8 active facts** at a time. New facts are only introduced as you master current ones.
-- **🚀 Accelerated Mastery**: Our aggressive confidence algorithm means you can master a fact in as little as **3 fast correct answers**.
-- **🔥 Winstreak System**: Build momentum and beat your best records. Gamified feedback loops keep learners engaged and motivated.
-- **🗺️ Mastery Heatmap**: A colorblind-friendly visual map of your progress across the entire 1x1 to 12x12 grid.
-- **🛠️ Customizable Gameplay**: Set your own round lengths (5-50 questions) and difficulty caps (up to 12x12).
-- **📴 Offline Ready**: Built as a PWA with IndexedDB persistence, works perfectly without an internet connection.
+### ⚡ Tiered Fluency (Speed Matters)
+Getting it right is just the first step. True mastery means instant recall.
+- **Learning**: Identifying the fact.
+- **Speed Building**: Getting faster at calculating.
+- **Fluent Mastery**: Answering in under 3 seconds. The app tracks these speeds to ensure kids aren't just counting on their fingers.
 
----
+### 📈 Adaptive Table Progression
+We don't just go from 1 to 12. Multiplay introduces tables based on their pedagogical difficulty:
+1. **The Patterns**: 1, 2, 3, 5, and 10 (The easiest to grasp).
+2. **The Extensions**: 4 and 11.
+3. **The Logical**: 9 (finger tricks) and 6 (extension of 3).
+4. **The Challenge**: 7, 8, and 12.
 
-## 🧠 Scientific Approach & Methodology
+**Smart Auto-Unlock**: When a child masters about 65% of their current tables, the system automatically introduces a new one, keeping the challenge just right.
 
-Multiplay isn't just a game; it's a precision learning tool based on cognitive science principles:
+![Mastery Heatmap Visualization](media/heatmap.jpg)
 
-### 1. Spaced Repetition System (SRS)
-Cognitive science shows that we learn best when we are challenged just before we forget. Multiplay tracks your confidence and response latency for every single multiplication "fact."
-*   **Weakness Targeting**: Facts with low confidence are prioritized (80% weight) to ensure they are reinforced frequently.
-*   **Maintenance**: Mastered facts are occasionally reintroduced for long-term retention verification.
+### 🎯 Controlled Focus
+To prevent frustration, the app manages exactly what the user sees:
+- **Active Set**: We focus on just 15 facts at a time. Once one is "Mastered," a new one is rotated in.
+- **Weighted Practice**: The app spends 60% of the time on the 5 facts the user finds hardest, ensuring they actually improve where it matters.
 
-### 2. Cognitive Load Management
-By using an **Active Practice Pool (Size: 8)**, we prevent overwhelming the learner. This "slot-based" system ensures that as one fact moves from short-term memory to long-term "Mastered" status, a single new challenge is introduced, maintaining a perfect balance of challenge and success.
+## ✨ Features
+- **Modern Design**: Clean glassmorphism UI with vibrant colors.
+- **Tactile Feedback**: Subtle haptic taps for correct answers and error signals.
+- **Detailed Stats**: A visual heatmap showing exactly which facts are mastered and which need work.
+- **Offline First**: Works anywhere, with progress saved locally in the browser.
 
-### 3. Immediate Feedback & Positive Reinforcement
-Response latency is a critical indicator of automaticity. Multiplay differentiates between "Correct" and "Mastered" (Correct + Fast), rewarding high-speed recall which is essential for mental math proficiency.
+![Mobile View](media/mobile.jpg)
 
----
-
-## 🛠️ Internal Algorithms
-
-### Confidence Scoring Logic
-The engine uses a dynamic scoring system based on performance:
-
-| Action | Boost/Penalty | Logic |
-| :--- | :--- | :--- |
-| **Fast Correct** | +35% | Answered within < 3s. Strong association. |
-| **Normal Correct** | +25% | Answered within 3s-6s. Good recall. |
-| **Slow Correct** | +10% | Answered within > 6s. Correct but struggling. |
-| **Wrong Answer** | -25% | Incorrect association. Needs immediate review. |
-
-*Mastery Threshold: 85% Confidence.*
-
-### Question Selection Engine
-The selection algorithm uses a weighted random roll:
-- **80% Chance**: Pick from the **3 weakest facts** in the current active set. This creates "intense focus" rounds.
-- **20% Chance**: Pick from the rest of the active set for variety and flow maintenance.
+## 🛠 Tech Stack
+- **Svelte 5**: Responsive and reactive frontend.
+- **Web Workers**: The learning engine runs in the background to keep things smooth.
+- **IndexedDB**: Persistent local storage for user profiles and progress.
 
 ---
-
-## 🏗️ Technical Stack
-
-- **Framework**: [Svelte 5](https://svelte.dev/) (using Runes for high-performance reactivity)
-- **Engine**: Custom Web Worker implementation (Comlink) to keep UI thread buttery smooth (60fps) during heavy calculations.
-- **Storage**: IndexedDB via `idb-keyval` for persistent progress storage.
-- **Styling**: Tailwind CSS with custom vibrant "kid-centric" design tokens.
-- **Icons**: Lucide Svelte.
-- **Fonts**: Outfit (Display) & Quicksand (Body) for maximum legibility.
-
----
-
-## 🚀 Getting Started
-
-```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-```
-
-Developed with ❤️ for the next generation of math wizards.
+*Created with ❤️ by vaju & Antigravity.*
