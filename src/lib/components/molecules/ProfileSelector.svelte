@@ -22,6 +22,12 @@
 
     isSubmitting = true;
     try {
+      // Auto-fullscreen on mobile interaction
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+
       // Create the profile
       const profile = await profileStore.createProfile(trimmedName);
       // Update the profile with selected avatar
@@ -45,6 +51,12 @@
   async function handleSelectProfile(profileId: string) {
     isSubmitting = true;
     try {
+      // Auto-fullscreen on mobile interaction
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+
       // IMPORTANT: Initialize game FIRST (this sets the storage profile ID)
       await game.init(profileId);
 

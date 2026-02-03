@@ -12,18 +12,11 @@
   import ProgressBar from "./lib/components/atoms/ProgressBar.svelte";
   import SettingsComp from "./lib/components/molecules/Settings.svelte";
   import ProfileSelector from "./lib/components/molecules/ProfileSelector.svelte";
-  import {
-    Settings,
-    BarChart3,
-    ChevronLeft,
-    Gamepad2,
-    Sparkles,
-    Trophy,
-    Users,
-  } from "lucide-svelte";
-  import type { AnswerResult } from "./worker/types";
+  import { Settings, BarChart3, ChevronLeft, Gamepad2, Sparkles, Trophy, Users, Maximize2, Minimize2 } from 'lucide-svelte';
+  import type { AnswerResult } from './worker/types';
 
   let view = $state<"game" | "stats" | "settings">("game");
+  let isFullscreen = $state(false);
   let isCorrect = $state<boolean | null>(null);
   let selectedAnswer = $state<number | null>(null);
 
@@ -183,6 +176,27 @@
     await game.refreshFacts();
     game.nextQuestion();
   }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+      isFullscreen = true;
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+        isFullscreen = false;
+      }
+    }
+  }
+
+  // Handle physical exit (like ESC key)
+  onMount(() => {
+    const handler = () => {
+      isFullscreen = !!document.fullscreenElement;
+    };
+    document.addEventListener('fullscreenchange', handler);
+    return () => document.removeEventListener('fullscreenchange', handler);
+  });
 </script>
 
 <div
@@ -265,12 +279,20 @@
     {/if}
 
     <div class="flex gap-2 sm:gap-2.5">
-      <button
-        onclick={() => (view = "stats")}
-        class="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-300 {view ===
-        'stats'
-          ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
-          : 'bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700'}"
+      <button 
+        onclick={toggleFullscreen}
+        class="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700 transition-all"
+        title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      >
+        {#if isFullscreen}
+          <Minimize2 size={16} />
+        {:else}
+          <Maximize2 size={16} />
+        {/if}
+      </button>
+      <button 
+        onclick={() => view = 'stats'} 
+        class="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-300 {view === 'stats' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700'}"
       >
         <BarChart3 size={16} />
         <span
