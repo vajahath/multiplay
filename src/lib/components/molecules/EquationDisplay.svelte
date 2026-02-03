@@ -11,7 +11,7 @@
 <div class="flex flex-col items-center justify-center py-2 sm:py-4 md:py-6 lg:py-8 max-h-full min-h-0 w-full overflow-hidden">
   <div class="text-[clamp(2rem,min(8vh,12vw),7rem)] leading-none font-black tracking-tighter flex items-center justify-center gap-[0.2em] font-display w-full">
     <span class="text-slate-800 dark:text-slate-100 transition-all duration-500 drop-shadow-lg shrink min-w-0">{factors[0]}</span>
-    <span class="text-indigo-500 animate-pulse opacity-80 shrink-0">×</span>
+    <span class="text-indigo-500 opacity-80 shrink-0">×</span>
     <span class="text-slate-800 dark:text-slate-100 transition-all duration-500 drop-shadow-lg shrink min-w-0">{factors[1]}</span>
     <span class="text-indigo-500 shrink-0">=</span>
     <div class="min-w-[1.2em] text-center relative shrink-0">

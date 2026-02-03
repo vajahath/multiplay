@@ -90,7 +90,7 @@
             <span>Mastered</span>
           </div>
           <div class="flex items-center gap-2 group/leg cursor-default">
-            <div class="w-4 h-4 rounded-md bg-indigo-500 border-2 border-indigo-500 ring-2 ring-indigo-500 dark:ring-white ring-offset-2 ring-offset-[#f0f4ff] dark:ring-offset-[#0f172a] shadow-sm animate-pulse transition-transform group-hover/leg:scale-110"></div>
+            <div class="w-4 h-4 rounded-md bg-indigo-500 border-2 border-indigo-500 ring-2 ring-indigo-500 dark:ring-white ring-offset-2 ring-offset-[#f0f4ff] dark:ring-offset-[#0f172a] shadow-sm transition-transform group-hover/leg:scale-110"></div>
             <span>Practicing</span>
           </div>
         </div>

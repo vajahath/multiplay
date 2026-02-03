@@ -202,13 +202,13 @@
 <div
   class="fixed inset-0 bg-[#f0f4ff] dark:bg-[#0f172a] -z-10 transition-colors duration-700"
 >
+  <!-- Static gradient blobs for visual interest (no animation for battery) -->
   <div class="absolute inset-0 opacity-40 dark:opacity-20 pointer-events-none">
     <div
-      class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-300 blur-[100px] rounded-full animate-vibrant-pulse"
+      class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-300 blur-[80px] rounded-full"
     ></div>
     <div
-      class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-300 blur-[100px] rounded-full animate-vibrant-pulse"
-      style="animation-delay: -1.5s"
+      class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-300 blur-[80px] rounded-full"
     ></div>
   </div>
 </div>
@@ -432,7 +432,7 @@
               />
             </div>
             <div
-              class="flex items-center gap-1.5 px-3 py-1.5 bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 rounded-xl shadow-sm animate-fun-bounce"
+              class="flex items-center gap-1.5 px-3 py-1.5 bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 rounded-xl shadow-sm"
             >
               <span class="text-base">🔥</span>
               <span class="text-base font-black">{currentStreak}</span>
@@ -475,7 +475,7 @@
 
           {#if !hasStartedRound && game.currentQuestion}
             <div
-              class="mt-1 text-slate-500 dark:text-slate-400 font-bold animate-pulse text-[10px] sm:text-base text-center shrink-0"
+              class="mt-1 text-slate-500 dark:text-slate-400 font-bold text-[10px] sm:text-base text-center shrink-0"
               in:fade
             >
               Ready? Select an answer! ⚡
