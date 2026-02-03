@@ -123,8 +123,8 @@
           game.setBestStreak(currentStreak);
         }
         audio.playCorrect();
-        // Haptic: Sharp, happy tap
-        if (navigator.vibrate) navigator.vibrate(10);
+        // Haptic: Sharp, happy tap (subtle)
+        if (navigator.vibrate) navigator.vibrate(5);
       } else {
         currentStreak = 0;
         audio.playWrong();
