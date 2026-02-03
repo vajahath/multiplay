@@ -92,7 +92,7 @@
 
 {#if profileStore.showSelector}
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-indigo-900/95 via-purple-900/95 to-pink-900/95 backdrop-blur-sm"
+    class="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 sm:pt-20 bg-gradient-to-br from-indigo-900/95 via-purple-900/95 to-pink-900/95 backdrop-blur-sm overflow-y-auto"
     in:fly={{ y: 20, duration: 400 }}
     role="dialog"
     aria-modal="true"

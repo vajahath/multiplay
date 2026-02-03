@@ -310,7 +310,7 @@
     </div>
   {:else if view === "stats"}
     <div
-      class="flex-1 overflow-y-auto pb-12 soft-scroll lg:grid lg:grid-cols-2 lg:gap-12 lg:space-y-0"
+      class="flex-1 overflow-y-auto pb-12 soft-scroll space-y-10 lg:grid lg:grid-cols-2 lg:gap-12 lg:space-y-0"
       in:fly={{ y: 20, duration: 500 }}
     >
       <!-- Left Column: Heatmap -->
@@ -391,11 +391,9 @@
       <!-- Game Info Panel (Progress & Title) - Fixed Height -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center shrink-0">
         <div class="lg:col-span-12 xl:col-span-7">
-          <div
-            class="bg-white/40 dark:bg-slate-800/40 backdrop-blur-md p-3 sm:p-4 rounded-[2rem] border border-white/20 dark:border-slate-700/20 shadow-sm flex items-center gap-4"
-          >
+          <div class="p-1 flex items-center gap-4">
             <div class="flex-1">
-              <div class="flex justify-between items-end mb-1">
+              <div class="flex justify-between items-end mb-1.5 px-1">
                 <span
                   class="text-[9px] font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-400"
                   >Round Progress</span
