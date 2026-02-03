@@ -53,6 +53,7 @@ class GameStore {
         const question = await engine.getNextQuestion();
         this.currentQuestion = question;
         this.isAnswering = false;
+        await this.refreshFacts(); // Catch any newly activated facts from getNextQuestion's maintainActiveSet logic
     }
 
     /**
@@ -89,12 +90,14 @@ class GameStore {
     async setEnabledTables(tables: number[]) {
         await engine.setEnabledTables(tables);
         this.enabledTables = tables;
+        await this.refreshFacts(); // Ensure heatmap reflects new enabled state
         await this.nextQuestion(); // Refresh question for new tables
     }
 
     async setMaxFactor(value: number) {
         await engine.setMaxFactor(value);
         this.maxFactor = value;
+        await this.refreshFacts();
         await this.nextQuestion();
     }
 
@@ -118,6 +121,7 @@ class GameStore {
         if (newTable !== null) {
             this.enabledTables = await engine.getEnabledTables();
         }
+        await this.refreshFacts(); // Refresh facts regardless to catch new ACTIVE items
         return newTable;
     }
 

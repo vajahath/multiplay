@@ -151,22 +151,9 @@ export class GameEngine {
     /**
      * Called periodically to maintain the active practice set.
      * When a fact is mastered, ensureActiveSetSize will fill the slot.
-     * Also checks if we should auto-unlock a new table based on mastery progress.
      */
     private async checkProgression() {
         await this.ensureActiveSetSize();
-
-        // Check adaptive table progression
-        const newTable = checkAdaptiveTableProgression(
-            Array.from(this.facts.values()),
-            this.enabledTables,
-            this.maxFactor
-        );
-
-        if (newTable !== null && !this.enabledTables.includes(newTable)) {
-            this.enabledTables = [...this.enabledTables, newTable];
-            await Storage.setSetting('enabledTables', this.enabledTables);
-        }
     }
 
     /**
