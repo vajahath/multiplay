@@ -1,4 +1,6 @@
-# 🎮 Multiplay
+# 🎮 Multiplay [![CI](https://github.com/vajahath/multiplay/actions/workflows/ci.yml/badge.svg)](https://github.com/vajahath/multiplay/actions/workflows/ci.yml)
+
+Play here: [Multiplay](https://vajahath.github.io/multiplay/)
 
 A smart, playful multiplication trainer designed to help kids move from counting to instant recall. Multiplay uses spaced repetition and adaptive learning to make practicing math feel more like a game and less like a chore.
 
