@@ -219,8 +219,9 @@
         {#if profileStore.currentProfile}
           <button
             onclick={() => profileStore.switchProfile()}
-            class="relative group shrink-0"
+            class="relative group shrink-0 cursor-pointer focus-visible:ring-4 focus-visible:ring-indigo-500/50 outline-none"
             title="Switch Player"
+            aria-label="Current player: {profileStore.currentProfile.name}. Click to switch player."
           >
             <div
               class="w-9 h-9 sm:w-10 sm:h-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-lg border border-white dark:border-slate-700 group-hover:scale-105 transition-transform"
@@ -234,8 +235,9 @@
         {/if}
         <button
           onclick={() => profileStore.switchProfile()}
-          class="min-w-0 text-left hover:opacity-80 transition-opacity"
+          class="min-w-0 text-left hover:opacity-80 transition-opacity cursor-pointer focus-visible:ring-2 focus-visible:ring-indigo-500/50 rounded-lg px-2 -mx-2 outline-none"
           title="Switch Player"
+          aria-label="Switch player"
         >
           <div
             class="text-[8px] sm:text-[9px] font-black uppercase text-indigo-500 tracking-[0.2em] mb-0.5 opacity-80 truncate"

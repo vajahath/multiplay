@@ -44,9 +44,23 @@
       mastered: results.filter(r => r.isMasteredEvent).length
     };
   });
+
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === 'Escape') {
+      onContinue();
+    }
+  }
 </script>
 
-<div class="fixed inset-0 bg-indigo-950/40 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6" in:fade>
+<svelte:window onkeydown={handleKeyDown} />
+
+<div 
+  class="fixed inset-0 bg-indigo-950/40 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6" 
+  in:fade 
+  role="dialog" 
+  aria-modal="true" 
+  aria-labelledby="summary-title"
+>
   <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] sm:rounded-[3rem] shadow-2xl max-w-lg lg:max-w-6xl w-full max-h-[95dvh] overflow-y-auto soft-scroll p-6 sm:p-10 relative border border-white/20 dark:border-slate-700/50" in:scale={{ duration: 600, easing: elasticOut, start: 0.8 }}>
     
     <!-- Background Decor -->
@@ -71,7 +85,7 @@
 
         <!-- Title -->
         <div class="mb-6">
-          <h2 class="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white font-display mb-2">
+          <h2 id="summary-title" class="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white font-display mb-2">
             {#if accuracy >= 90}
               Superstar! 🌟
             {:else if accuracy >= 70}

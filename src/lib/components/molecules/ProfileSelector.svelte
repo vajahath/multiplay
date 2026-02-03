@@ -80,12 +80,23 @@
     if (!profileStore.currentProfile || isSubmitting) return;
     profileStore.showSelector = false;
   }
+
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.key === "Escape" && profileStore.showSelector) {
+      handleClose();
+    }
+  }
 </script>
+
+<svelte:window onkeydown={onKeyDown} />
 
 {#if profileStore.showSelector}
   <div
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-indigo-900/95 via-purple-900/95 to-pink-900/95 backdrop-blur-sm"
     in:fly={{ y: 20, duration: 400 }}
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="selector-title"
   >
     <div
       class="w-full max-w-md sm:max-w-lg bg-white dark:bg-slate-800 rounded-[3rem] p-8 shadow-2xl relative"
@@ -113,6 +124,7 @@
               {selectedAvatar}
             </button>
             <h2
+              id="selector-title"
               class="text-2xl font-black text-slate-800 dark:text-white font-display"
             >
               {profileStore.profiles.length === 0
@@ -166,6 +178,7 @@
         <div class="space-y-6" in:fly={{ x: -20, duration: 300 }}>
           <div class="text-center">
             <h2
+              id="selector-title"
               class="text-2xl font-black text-slate-800 dark:text-white font-display"
             >
               Who's Playing? 🎮
