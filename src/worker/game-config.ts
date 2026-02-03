@@ -14,7 +14,8 @@ export const GameConfig = {
     // CONFIDENCE SCORING
     CONFIDENCE_BOOST_FAST: 0.30,   // +30% for fast correct
     CONFIDENCE_BOOST_NORMAL: 0.20, // +20% for normal speed correct
-    CONFIDENCE_DECAY_SLOW: 0.10,   // +10% for slow correct
+    CONFIDENCE_BOOST_SLOW: 0.10,   // +10% for slow correct (learning facts)
+    CONFIDENCE_PENALTY_SLOW: -0.15, // -15% penalty for slow answer on high-confidence facts (fluency regression)
     CONFIDENCE_PENALTY_WRONG: -0.40, // -40% penalty for wrong
 
     // FLUENCY GATES - Each speed tier has a maximum confidence ceiling

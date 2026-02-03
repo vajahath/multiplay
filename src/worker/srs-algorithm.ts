@@ -5,11 +5,17 @@ import type { Fact, Question } from './types';
  * Calculates the change in confidence based on performance.
  * 
  * TIERED FLUENCY SYSTEM:
- * - Slow (>6s):   +10%, capped at 70%  — Learning the fact
- * - Normal (3-6s): +20%, capped at 85% — Building speed  
  * - Fast (<3s):   +30%, no cap         — True fluency, can reach 95% mastery
+ * - Normal (3-6s): +20%, capped at 85% — Building speed  
+ * - Slow (>6s):
+ *   - For learning facts (<70% confidence): +10%, capped at 70%
+ *   - For fluent facts (>=70% confidence):  -15% PENALTY (fluency regression)
+ * 
+ * WRONG ANSWER: -40% penalty
  * 
  * This ensures "Mastered" truly means instant recall, not just understanding.
+ * High-confidence facts that are answered slowly will be penalized and pushed
+ * back into the learning set for additional drilling.
  */
 export function calculateConfidenceUpdate(
     currentConfidence: number,
@@ -29,8 +35,16 @@ export function calculateConfidenceUpdate(
             delta = GameConfig.CONFIDENCE_BOOST_NORMAL;
             confidenceCap = GameConfig.NORMAL_CONFIDENCE_CAP;
         } else {
-            // Slow but correct - small boost, capped at 70%
-            delta = GameConfig.CONFIDENCE_DECAY_SLOW;
+            // Slow but correct:
+            // - For low-confidence facts (still learning): small boost, capped at 70%
+            // - For high-confidence facts (should be fluent): PENALTY for slow response
+            if (currentConfidence >= GameConfig.SLOW_CONFIDENCE_CAP) {
+                // High confidence fact answered slowly = fluency regression, apply penalty
+                delta = GameConfig.CONFIDENCE_PENALTY_SLOW;
+            } else {
+                // Low confidence fact answered slowly = still learning, small boost
+                delta = GameConfig.CONFIDENCE_BOOST_SLOW;
+            }
             confidenceCap = GameConfig.SLOW_CONFIDENCE_CAP;
         }
     } else {
@@ -39,7 +53,7 @@ export function calculateConfidenceUpdate(
 
     let newConfidence = Math.max(0.0, Math.min(1.0, currentConfidence + delta));
 
-    // Apply fluency cap if applicable
+    // Apply fluency cap if applicable (only limits upward growth)
     if (confidenceCap !== null && newConfidence > confidenceCap) {
         newConfidence = confidenceCap;
     }

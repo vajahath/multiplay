@@ -2,7 +2,7 @@
   import { fade, scale, fly } from 'svelte/transition';
   import { elasticOut } from 'svelte/easing';
   import type { AnswerResult, Fact } from '../../../worker/types';
-  import { Trophy, Star, TrendingUp, ArrowRight, PartyPopper, Eye, Check, Sparkles, Unlock, Download, Smartphone } from 'lucide-svelte';
+  import { Trophy, Star, TrendingUp, ArrowRight, PartyPopper, Eye, Check, Sparkles, Unlock, Download, Smartphone, X } from 'lucide-svelte';
   import Heatmap from './Heatmap.svelte';
   import { pwaStore } from '../../stores/pwa.svelte';
 
@@ -63,6 +63,16 @@
   aria-labelledby="summary-title"
 >
   <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] sm:rounded-[3rem] shadow-2xl max-w-lg lg:max-w-6xl w-full max-h-[95dvh] overflow-y-auto soft-scroll p-6 sm:p-10 relative border border-white/20 dark:border-slate-700/50" in:scale={{ duration: 600, easing: elasticOut, start: 0.8 }}>
+    
+    <!-- Close Button -->
+    <button
+      onclick={onContinue}
+      class="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-500 dark:text-slate-400 rounded-xl transition-all hover:scale-105 active:scale-95"
+      aria-label="Close and continue"
+      title="Close (Esc)"
+    >
+      <X size={20} />
+    </button>
     
     <!-- Background Decor -->
     <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-indigo-50 dark:from-indigo-900/20 to-transparent -z-10"></div>
