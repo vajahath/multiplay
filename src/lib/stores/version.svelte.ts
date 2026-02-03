@@ -25,8 +25,9 @@ class UpdateStore {
         }
 
         try {
-            this.registration = await navigator.serviceWorker.register('/sw.js', {
-                scope: '/',
+            // Use relative paths to support subpath deployments (like GitHub Pages)
+            this.registration = await navigator.serviceWorker.register('./sw.js', {
+                scope: './',
             });
 
             // Check for waiting worker (update already downloaded)
