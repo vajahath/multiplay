@@ -10,7 +10,13 @@ vi.mock('./storage', () => ({
         updateFact: vi.fn(),
         getSetting: vi.fn().mockResolvedValue(null),
         setSetting: vi.fn(),
-    }
+    },
+    setStorageProfileId: vi.fn(),
+    getStorageProfileId: vi.fn().mockReturnValue('test-profile'),
+}));
+
+vi.mock('../lib/db/migrate-legacy', () => ({
+    migrateLegacyData: vi.fn().mockResolvedValue(undefined),
 }));
 
 describe('GameEngine', () => {
@@ -19,7 +25,7 @@ describe('GameEngine', () => {
     beforeEach(async () => {
         vi.clearAllMocks();
         engine = new GameEngine();
-        await engine.init();
+        await engine.init('test-profile');
     });
 
     it('should initialize with 169 facts if storage is empty', async () => {
