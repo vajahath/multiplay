@@ -281,7 +281,7 @@
     <div class="flex gap-2 sm:gap-2.5">
       <button 
         onclick={toggleFullscreen}
-        class="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700 transition-all"
+        class="hidden sm:flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700/30 hover:bg-white dark:hover:bg-slate-700 transition-all"
         title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
       >
         {#if isFullscreen}
