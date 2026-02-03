@@ -13,14 +13,14 @@ Multiplay is designed with a strict separation of concerns to ensure UI performa
     - **Weighted Selection**: Uses a probability distribution (60% Weak Pool / 20% Mastered / 20% Learning) for optimal drilling.
     - **Pedagogical Progression**: Automatically unlocks tables based on difficulty patterns (e.g., 2s and 5s before 7s) rather than numerical order.
 - **UI State Proxy**: Resides in `src/lib/stores/game.svelte.ts`. Uses Svelte 5 Runes to mirror worker state and expose it reactively to the frontend.
-- **Persistence Layer**: Found in `src/worker/storage.ts`. Implements scoped profile storage using IndexedDB (via `idb-keyval`).
+- **Persistence Layer**: Found in `src/worker/storage.ts`. Implements scoped profile storage using a custom versioned IndexedDB (defined in `src/lib/db/database.ts`).
 
 ## 🛠️ Tech Stack (AI Curated)
 
 - **Framework**: Svelte 5 (Runes) for granular reactivity.
 - **Threading**: Web Workers + **Comlink** for type-safe RPC communication.
 - **Styling**: Tailwind CSS with custom Modern CSS Animations.
-- **Persistence**: IndexedDB for offline-first player profiles and progress.
+- **Persistence**: Custom versioned IndexedDB for offline-first player profiles and progress.
 - **Performance**: Latency-masking patterns (700ms feedback windows) to hide background worker operations.
 
 ---
