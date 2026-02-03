@@ -22,6 +22,7 @@ export interface AnswerResult {
     newConfidence: number;
     deltaConfidence: number;   // How much did it change? (+0.05, -0.1)
     isMasteredEvent: boolean;  // Did this specific answer trigger MASTERED status?
+    isDemasteredEvent: boolean; // Did this specific answer cause loss of MASTERED status?
 }
 
 export interface RoundSummary {

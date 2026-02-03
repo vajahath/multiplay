@@ -9,7 +9,7 @@
   let newName = $state("");
   let selectedAvatar = $state(getRandomAvatar());
   let isSubmitting = $state(false);
-  let nameInput: HTMLInputElement;
+  let nameInput = $state<HTMLInputElement>();
 
   // Computed: show create form if no profiles exist or user clicked "Add New"
   const showCreateForm = $derived(

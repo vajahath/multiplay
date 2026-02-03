@@ -42,7 +42,8 @@
     const totalDelta = results.reduce((sum, r) => sum + r.deltaConfidence, 0);
     return {
       totalDelta: Math.round(totalDelta * 100),
-      mastered: results.filter(r => r.isMasteredEvent).length
+      mastered: results.filter(r => r.isMasteredEvent).length,
+      demastered: results.filter(r => r.isDemasteredEvent).length
     };
   });
 

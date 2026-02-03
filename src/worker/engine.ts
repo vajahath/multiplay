@@ -117,14 +117,17 @@ export class GameEngine {
         fact.lastPracticed = Date.now();
 
         let isMasteredEvent = false;
+        let isDemasteredEvent = false;
+
         // Promote ACTIVE to MASTERED if confidence reaches threshold
         if (fact.status === 'ACTIVE' && fact.confidence >= GameConfig.MASTERED_THRESHOLD) {
             fact.status = 'MASTERED';
             isMasteredEvent = true;
         }
-        // Demote MASTERED to ACTIVE if confidence drops below threshold (e.g., after wrong answer)
+        // Demote MASTERED to ACTIVE if confidence drops below threshold (e.g., after wrong answer or slow answer)
         else if (fact.status === 'MASTERED' && fact.confidence < GameConfig.MASTERED_THRESHOLD) {
             fact.status = 'ACTIVE';
+            isDemasteredEvent = true;
         }
 
         await Storage.updateFact(fact);
@@ -140,7 +143,8 @@ export class GameEngine {
             timeTaken,
             newConfidence,
             deltaConfidence: delta,
-            isMasteredEvent
+            isMasteredEvent,
+            isDemasteredEvent
         };
     }
 
