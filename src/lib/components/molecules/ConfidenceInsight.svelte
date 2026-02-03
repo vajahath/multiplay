@@ -50,7 +50,7 @@
       <div class="flex-1 min-w-0">
         <div class="flex justify-between items-center mb-0.5">
           <span class="text-xs sm:text-sm font-black text-amber-600 dark:text-amber-400">🐢 Slow</span>
-          <span class="text-xs font-black px-2 py-0.5 bg-amber-500 text-white rounded-full">{formatPercent(GameConfig.CONFIDENCE_DECAY_SLOW)}</span>
+          <span class="text-xs font-black px-2 py-0.5 bg-amber-500 text-white rounded-full">{formatPercent(GameConfig.CONFIDENCE_PENALTY_SLOW)}</span>
         </div>
         <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-bold">Over {GameConfig.TIME_THRESHOLD_SLOW / 1000}s → <span class="text-amber-500">Capped at {Math.round(GameConfig.SLOW_CONFIDENCE_CAP * 100)}%</span></p>
       </div>
