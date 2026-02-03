@@ -2,8 +2,9 @@
   import { fade, scale, fly } from 'svelte/transition';
   import { elasticOut } from 'svelte/easing';
   import type { AnswerResult, Fact } from '../../../worker/types';
-  import { Trophy, Star, TrendingUp, ArrowRight, PartyPopper, Eye, Check, Sparkles, Unlock } from 'lucide-svelte';
+  import { Trophy, Star, TrendingUp, ArrowRight, PartyPopper, Eye, Check, Sparkles, Unlock, Download, Smartphone } from 'lucide-svelte';
   import Heatmap from './Heatmap.svelte';
+  import { pwaStore } from '../../stores/pwa.svelte';
 
   interface Props {
     totalQuestions: number;
@@ -151,6 +152,37 @@
                 <p class="text-lg sm:text-xl font-black">
                   The <span class="bg-white/20 px-2 py-0.5 rounded-lg">{unlockedTable}×</span> table is now available!
                 </p>
+              </div>
+            </div>
+          </div>
+        {/if}
+
+        <!-- PWA Install Nudge -->
+        {#if !pwaStore.isInstalled && (pwaStore.canInstall || pwaStore.isIOS)}
+          <div class="w-full bg-slate-50 dark:bg-slate-700/30 rounded-[1.5rem] sm:rounded-[2rem] p-5 mb-6 border border-slate-200/50 dark:border-slate-600/30">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center shrink-0">
+                <Download size={20} />
+              </div>
+              <div class="flex-1 text-left">
+                <h4 class="font-black text-slate-800 dark:text-white text-sm mb-1 line-clamp-1">Install Multiplay! 📱</h4>
+                <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-3 leading-tight">
+                  Get the full app experience. It's tiny (only 3MB) and works offline!
+                </p>
+                
+                {#if pwaStore.canInstall}
+                  <button 
+                    onclick={() => pwaStore.install()}
+                    class="w-full py-2.5 bg-indigo-600 text-white font-black text-xs rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
+                  >
+                    Install Now
+                  </button>
+                {:else if pwaStore.isIOS}
+                  <div class="flex items-center gap-2 text-[10px] font-black text-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 p-2.5 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
+                    <Smartphone size={14} />
+                    <span>Tap Share → "Add to Home Screen"</span>
+                  </div>
+                {/if}
               </div>
             </div>
           </div>
