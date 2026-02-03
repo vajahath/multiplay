@@ -110,10 +110,10 @@ export function selectNextQuestion(facts: Fact[], enabledTables: number[], maxFa
     // learningThreshold would be 100
 
     if (roll < weakThreshold && weakPool.length > 0) {
-        // 60%: Pick from weak pool (lowest confidence items)
+        // 50%: Pick from weak pool (lowest confidence items)
         selected = weakPool[Math.floor(Math.random() * weakPool.length)];
     } else if (roll < masteredThreshold && masteredFacts.length > 0) {
-        // 20%: Pick from mastered pool (reinforcement)
+        // 30%: Pick from mastered pool (reinforcement)
         // Optionally sort by time since last practice, but random is fine for now
         selected = masteredFacts[Math.floor(Math.random() * masteredFacts.length)];
     } else if (learningPool.length > 0) {

@@ -26,8 +26,8 @@ export const GameConfig = {
 
     // QUESTION SELECTION WEIGHTS (must sum to 100)
     // Controls the probability distribution for selecting the next question
-    WEIGHT_WEAK_ITEMS: 60,         // 60% chance: Pick from weakest confidence items (intensive drilling)
-    WEIGHT_MASTERED_REVIEW: 20,    // 20% chance: Pick from mastered items (reinforcement to prevent decay)
+    WEIGHT_WEAK_ITEMS: 50,         // 50% chance: Pick from weakest confidence items (intensive drilling)
+    WEIGHT_MASTERED_REVIEW: 30,    // 30% chance: Pick from mastered items (reinforcement to prevent decay)
     WEIGHT_LEARNING_VARIETY: 20,   // 20% chance: Pick from remaining learning set (variety)
 
     // How many "weakest" items to consider for the weak pool
